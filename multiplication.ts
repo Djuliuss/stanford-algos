@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 const karatsuba = (x: string, y: string): string => {
   const [xArray, yArray] = [[...x], [...y]];
   equalizeLength(xArray, yArray);
-  if (xArray.length === 1 && yArray.length === 1) {
+  if (xArray.length === 1) {
     return (Number(xArray[0]) * Number(yArray[0])).toString();
   }
   const length = xArray.length % 2 === 0 ? xArray.length : xArray.length - 1;
