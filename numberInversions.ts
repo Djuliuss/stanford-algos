@@ -16,12 +16,9 @@ interface getInversionsResponse {
   numberInversions: number;
 }
 
-let GLOBAL_NUMBERS: any[] = [];
-let numberOfCalls = 0;
-
-const sortAndCountInversions = (numbers: string[]): getInversionsResponse => {
-  GLOBAL_NUMBERS = numbers;
-  console.info(numberOfCalls++);
+export const sortAndCountInversions = (
+  numbers: string[]
+): getInversionsResponse => {
   if ([0, 1].includes(numbers.length)) {
     return {
       sortedNumbers: numbers,
@@ -52,21 +49,29 @@ const mergeAndCountSplitInversions = (
 ): getInversionsResponse => {
   let [i, j, k, splitInversions] = [0, 0, 0, 0];
   const sortedNumbers: string[] = [];
-  while (
-    i <= leftSortedNumbers.length - 1 ||
-    j <= rightSortedNumbers.length - 1
-  ) {
-    if (Number(leftSortedNumbers[i]) < Number(rightSortedNumbers[j])) {
+  let [leftFinished, rightFinished] = [false, false];
+  while (!leftFinished || !rightFinished) {
+    if (
+      !leftFinished &&
+      (Number(leftSortedNumbers[i]) < Number(rightSortedNumbers[j]) ||
+        rightFinished)
+    ) {
       sortedNumbers[k] = leftSortedNumbers[i];
-      if (i !== leftSortedNumbers.length - 1) {
+      if (i < leftSortedNumbers.length - 1) {
         i++;
+      } else {
+        leftFinished = true;
       }
-    } else {
+    } else if (!rightFinished) {
       sortedNumbers[k] = rightSortedNumbers[j];
-      if (j !== rightSortedNumbers.length - 1) {
+      if (j < rightSortedNumbers.length - 1) {
         j++;
+      } else {
+        rightFinished = true;
       }
-      splitInversions += Math.floor(leftSortedNumbers.length - i);
+      if (!leftFinished) {
+        splitInversions += Math.floor(leftSortedNumbers.length - i);
+      }
     }
     k++;
   }
@@ -80,23 +85,6 @@ const mergeAndCountSplitInversions = (
 (async () => {
   const numbers = await getNumbers();
   const numbersFixed = numbers?.map((e) => Number(e).toString());
-  try {
-    console.error("JD!!! I AM HERE at numberInversions.ts 74");
-
-    const response = sortAndCountInversions(numbersFixed!);
-    console.info(`number of inversion is ${response.numberInversions}`);
-  } catch (e) {
-    console.info(`I got this far: ${GLOBAL_NUMBERS}`);
-  }
+  const response = sortAndCountInversions(numbersFixed!);
+  console.info(`number of inversion is ${response.numberInversions}`);
 })();
-
-// const arr1 = ["29"];
-// const arr2 = ["25", "60"];
-// const response = mergeAndCountSplitInversions(arr1, arr2);
-// console.error(
-//   `JD!!! numberInversions.ts 89. The value of response is ${JSON.stringify(
-//     response,
-//     null,
-//     2
-//   )} `
-// );
