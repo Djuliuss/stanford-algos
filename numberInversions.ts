@@ -47,19 +47,26 @@ const sortAndCountInversions = (numbers: string[]): getInversionsResponse => {
 };
 
 const mergeAndCountSplitInversions = (
-  rightNumbers: string[],
-  leftNumbers: string[]
+  leftSortedNumbers: string[],
+  rightSortedNumbers: string[]
 ): getInversionsResponse => {
   let [i, j, k, splitInversions] = [0, 0, 0, 0];
   const sortedNumbers: string[] = [];
-  while (i <= rightNumbers.length - 1 || j <= leftNumbers.length - 1) {
-    if (Number(rightNumbers[i]) < Number(leftNumbers[j])) {
-      sortedNumbers[k] = rightNumbers[i];
-      i++;
+  while (
+    i <= leftSortedNumbers.length - 1 ||
+    j <= rightSortedNumbers.length - 1
+  ) {
+    if (Number(leftSortedNumbers[i]) < Number(rightSortedNumbers[j])) {
+      sortedNumbers[k] = leftSortedNumbers[i];
+      if (i !== leftSortedNumbers.length - 1) {
+        i++;
+      }
     } else {
-      sortedNumbers[k] = leftNumbers[j];
-      j++;
-      splitInversions += Math.floor(rightNumbers.length - i);
+      sortedNumbers[k] = rightSortedNumbers[j];
+      if (j !== rightSortedNumbers.length - 1) {
+        j++;
+      }
+      splitInversions += Math.floor(leftSortedNumbers.length - i);
     }
     k++;
   }
