@@ -62,19 +62,20 @@ function sortAndCountInversionsTesting() {
 }
 
 function quickSortTesting() {
-  const numberOfTests = 100;
-  let test = 0;
-  while (test < numberOfTests) {
-    const testArray = randomUniqueNum(10, 8);
-    const quickSortedArray = quickSort(testArray)!;
+  const numberOfTests = 1;
+  let test = 1;
+  while (test <= numberOfTests) {
+    // const testArray = randomUniqueNum(10, 8);
+    const testArray = [3, 8, 2, 5, 1, 4, 7, 6];
+    quickSort(testArray, 0, testArray.length - 1);
     const jsSort = testArray.sort();
-    if (jsSort.length !== quickSortedArray.length) {
+    if (jsSort.length !== testArray.length) {
       // JD!!! improve
       throw new Error("Wrong length");
     }
-    for (let i = 0; i < quickSortedArray.length; i++) {
+    for (let i = 0; i < testArray.length; i++) {
       // JD!!! imrpove
-      if (quickSortedArray[i] !== jsSort[i]) {
+      if (testArray[i] !== jsSort[i]) {
         throw new Error("wrong value");
       }
     }
@@ -84,27 +85,34 @@ function quickSortTesting() {
 }
 
 function testPartitionArray() {
-  const numberOfTests = 1;
+  const numberOfTests = 1000;
   let test = 1;
   while (test <= numberOfTests) {
-    const testArray = randomUniqueNum(10, 8);
-    const partitionedArrayIndex = partitionArray(testArray, 0)!;
-    validateArray(testArray, partitionedArrayIndex);
+    const testArray = randomUniqueNum(100, 25);
+    // const testArray = [3, 8, 2, 5, 1, 4, 7, 6];
+    const pivotFinalPosition = partitionArray(
+      testArray,
+      0,
+      testArray.length - 1
+    )!;
+    validateArray(testArray, pivotFinalPosition);
     console.info(`Succesfull testing ${test}`);
     test++;
   }
 }
 
-function validateArray(arr: number[], partitionArrayIndex: number) {
-  const pivotValue = arr[0];
+function validateArray(arr: number[], pivotPositionAfterPartition: number) {
+  const pivotValue = arr[pivotPositionAfterPartition];
   for (let index = 0; index < arr.length; index++) {
     const element = arr[index];
-    if (index < partitionArrayIndex) {
+    if (index < pivotPositionAfterPartition) {
       if (element > pivotValue) {
         throw new Error(
           `Value ${element} in position ${index} is higher than ${pivotValue}`
         );
       }
+    } else if (index === pivotPositionAfterPartition) {
+      // continue
     } else {
       if (element < pivotValue) {
         throw new Error(
