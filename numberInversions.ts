@@ -82,9 +82,9 @@ const mergeAndCountSplitInversions = (
   };
 };
 
-(async () => {
-  const numbers = await getNumbers();
-  const numbersFixed = numbers?.map((e) => Number(e).toString());
-  const response = sortAndCountInversions(numbersFixed!);
-  console.info(`number of inversion is ${response.numberInversions}`);
-})();
+// (async () => {
+//   const numbers = await getNumbers();
+//   const numbersFixed = numbers?.map((e) => Number(e).toString());
+//   const response = sortAndCountInversions(numbersFixed!);
+//   console.info(`number of inversion is ${response.numberInversions}`);
+// })();
