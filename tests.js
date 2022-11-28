@@ -1,12 +1,12 @@
+"use strict";
+exports.__esModule = true;
 // import { sortAndCountInversions } from "./numberInversions";
-import { add } from "./quickSort";
-import { expect } from "chai";
-
+var quickSort_1 = require("./quickSort");
+var chai_1 = require("chai");
 // interface TestCase {
 //   numbers: string[];
 //   expectedResult: number;
 // }
-
 // (async () => {
 //   const testCase1 = {
 //     numbers: ["8", "4", "2", "1"],
@@ -32,7 +32,6 @@ import { expect } from "chai";
 //     numbers: ["1", "5", "2", "8", "3", "4"],
 //     expectedResult: 5,
 //   };
-
 //   const testCase7 = {
 //     numbers: ["8", "4", "1", "2"],
 //     expectedResult: 5,
@@ -57,10 +56,9 @@ import { expect } from "chai";
 //     }
 //   });
 // })();
-
-describe("a describe", () => {
-  it("a it", () => {
-    const response = add(3, 4);
-    expect(response).to.be.equal(7);
+describe("a describe", function () {
+  it("a it", function () {
+    var response = (0, quickSort_1.add)(3, 4);
+    (0, chai_1.expect)(response).to.be.equal(7);
   });
 });
