@@ -1,5 +1,5 @@
 import { sortAndCountInversions } from "./numberInversions";
-import { partitionArray, quickSort } from "./quickSort";
+import { partitionArray } from "./quickSort";
 import { randomUniqueNum } from "./utils";
 interface TestCase {
   numbers: string[];
@@ -7,8 +7,8 @@ interface TestCase {
 }
 
 // sortAndCountInversionsTesting();
-quickSortTesting();
-// testPartitionArray();
+// quickSortTesting();
+testPartitionArray();
 
 function sortAndCountInversionsTesting() {
   const testCase1 = {
@@ -61,34 +61,35 @@ function sortAndCountInversionsTesting() {
   });
 }
 
-function quickSortTesting() {
-  const numberOfTests = 100;
-  let test = 0;
-  while (test < numberOfTests) {
-    const testArray = randomUniqueNum(10, 8);
-    const quickSortedArray = quickSort(testArray)!;
-    const jsSort = testArray.sort();
-    if (jsSort.length !== quickSortedArray.length) {
-      // JD!!! improve
-      throw new Error("Wrong length");
-    }
-    for (let i = 0; i < quickSortedArray.length; i++) {
-      // JD!!! imrpove
-      if (quickSortedArray[i] !== jsSort[i]) {
-        throw new Error("wrong value");
-      }
-    }
-    console.info(`test ${test} sucessful`);
-    test++;
-  }
-}
+// function quickSortTesting() {
+//   const numberOfTests = 100;
+//   let test = 0;
+//   while (test < numberOfTests) {
+//     const testArray = randomUniqueNum(10, 8);
+//     const quickSortedArray = quickSort(testArray)!;
+//     const jsSort = testArray.sort();
+//     if (jsSort.length !== quickSortedArray.length) {
+//       // JD!!! improve
+//       throw new Error("Wrong length");
+//     }
+//     for (let i = 0; i < quickSortedArray.length; i++) {
+//       // JD!!! imrpove
+//       if (quickSortedArray[i] !== jsSort[i]) {
+//         throw new Error("wrong value");
+//       }
+//     }
+//     console.info(`test ${test} sucessful`);
+//     test++;
+//   }
+// }
 
 function testPartitionArray() {
-  const numberOfTests = 1;
+  const numberOfTests = 100;
   let test = 1;
   while (test <= numberOfTests) {
     const testArray = randomUniqueNum(10, 8);
-    const partitionedArrayIndex = partitionArray(testArray, 0)!;
+    // const testArray = [3, 8, 2, 5, 1, 4, 7, 6];
+    const partitionedArrayIndex = partitionArray(testArray);
     validateArray(testArray, partitionedArrayIndex);
     console.info(`Succesfull testing ${test}`);
     test++;
@@ -96,7 +97,7 @@ function testPartitionArray() {
 }
 
 function validateArray(arr: number[], partitionArrayIndex: number) {
-  const pivotValue = arr[0];
+  const pivotValue = arr[partitionArrayIndex];
   for (let index = 0; index < arr.length; index++) {
     const element = arr[index];
     if (index < partitionArrayIndex) {
@@ -105,6 +106,8 @@ function validateArray(arr: number[], partitionArrayIndex: number) {
           `Value ${element} in position ${index} is higher than ${pivotValue}`
         );
       }
+    } else if (index === partitionArrayIndex) {
+      // continue
     } else {
       if (element < pivotValue) {
         throw new Error(
