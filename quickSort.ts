@@ -13,8 +13,11 @@ export const quickSort = (arr: number[]) => {
     return arr;
   }
   const pivotIndex = selectPivot(firstElement, arr);
-  const leftArray: number[] = [];
-  const rightArray: number[] = [];
+  const partitionIndex = partitionArray(arr, pivotIndex);
+  const leftArray: number[] = arr.slice(1, partitionIndex);
+  const rightArray: number[] = arr.slice(partitionIndex);
+  quickSort(leftArray);
+  quickSort(rightArray);
 };
 
 function firstElement(arr: number[]) {
@@ -35,5 +38,6 @@ export function partitionArray(arr: number[], pivotIndex: number) {
     }
     j++;
   }
+
   return i;
 }

@@ -7,8 +7,8 @@ interface TestCase {
 }
 
 // sortAndCountInversionsTesting();
-// quickSortTesting();
-testPartitionArray();
+quickSortTesting();
+// testPartitionArray();
 
 function sortAndCountInversionsTesting() {
   const testCase1 = {
@@ -65,7 +65,7 @@ function quickSortTesting() {
   const numberOfTests = 100;
   let test = 0;
   while (test < numberOfTests) {
-    const testArray = randomUniqueNum(1000000, 1000000);
+    const testArray = randomUniqueNum(10, 8);
     const quickSortedArray = quickSort(testArray)!;
     const jsSort = testArray.sort();
     if (jsSort.length !== quickSortedArray.length) {
@@ -84,13 +84,10 @@ function quickSortTesting() {
 }
 
 function testPartitionArray() {
-  const numberOfTests = 100;
+  const numberOfTests = 1;
   let test = 1;
   while (test <= numberOfTests) {
-    const testArray = randomUniqueNum(
-      Math.floor(Math.random() * 1000),
-      Math.floor(Math.random() * 1000)
-    );
+    const testArray = randomUniqueNum(10, 8);
     const partitionedArrayIndex = partitionArray(testArray, 0)!;
     validateArray(testArray, partitionedArrayIndex);
     console.info(`Succesfull testing ${test}`);
