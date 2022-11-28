@@ -1,5 +1,5 @@
 import { sortAndCountInversions } from "./numberInversions";
-import { quickSort } from "./quickSort";
+import { partitionArray, quickSort } from "./quickSort";
 import { randomUniqueNum } from "./utils";
 interface TestCase {
   numbers: string[];
@@ -7,7 +7,8 @@ interface TestCase {
 }
 
 // sortAndCountInversionsTesting();
-quickSortTesting();
+// quickSortTesting();
+testPartitionArray();
 
 function sortAndCountInversionsTesting() {
   const testCase1 = {
@@ -65,7 +66,7 @@ function quickSortTesting() {
   let test = 0;
   while (test < numberOfTests) {
     const testArray = randomUniqueNum(1000000, 1000000);
-    const quickSortedArray = quickSort(testArray);
+    const quickSortedArray = quickSort(testArray)!;
     const jsSort = testArray.sort();
     if (jsSort.length !== quickSortedArray.length) {
       // JD!!! improve
@@ -79,5 +80,40 @@ function quickSortTesting() {
     }
     console.info(`test ${test} sucessful`);
     test++;
+  }
+}
+
+function testPartitionArray() {
+  const numberOfTests = 100;
+  let test = 1;
+  while (test <= numberOfTests) {
+    const testArray = randomUniqueNum(
+      Math.floor(Math.random() * 1000),
+      Math.floor(Math.random() * 1000)
+    );
+    const partitionedArrayIndex = partitionArray(testArray, 0)!;
+    validateArray(testArray, partitionedArrayIndex);
+    console.info(`Succesfull testing ${test}`);
+    test++;
+  }
+}
+
+function validateArray(arr: number[], partitionArrayIndex: number) {
+  const pivotValue = arr[0];
+  for (let index = 0; index < arr.length; index++) {
+    const element = arr[index];
+    if (index < partitionArrayIndex) {
+      if (element > pivotValue) {
+        throw new Error(
+          `Value ${element} in position ${index} is higher than ${pivotValue}`
+        );
+      }
+    } else {
+      if (element < pivotValue) {
+        throw new Error(
+          `Value ${element} in position ${index} is lower than ${pivotValue}`
+        );
+      }
+    }
   }
 }

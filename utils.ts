@@ -15,11 +15,8 @@ export function randomUniqueNum(range: number, outputCount: number) {
   return result;
 }
 
-console.info(randomUniqueNum(100, 10));
-console.info(randomUniqueNum(100, 10));
-console.info(randomUniqueNum(100, 10));
-console.info(randomUniqueNum(100, 10));
-console.info(randomUniqueNum(100, 10));
-console.info(randomUniqueNum(100, 10));
-console.info(randomUniqueNum(100, 10));
-console.info(randomUniqueNum(100, 10));
+export function swap(arr: any[], posA: number, posB: number) {
+  const temp = arr[posB];
+  arr[posB] = arr[posA];
+  arr[posA] = temp;
+}
