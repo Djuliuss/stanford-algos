@@ -1,5 +1,11 @@
-import { sortAndCountInversions } from "./numberInversions";
-import { initialiseGlobalArray, partitionArray, quickSort } from "./quickSort";
+import { sortAndCountInversions } from "./runner";
+import {
+  addNumberOfComparions,
+  getNumberOfComparisons,
+  initialiseGlobalArray,
+  partitionArray,
+  quickSort,
+} from "./quickSort";
 import { NumberObject } from "./types";
 import { randomUniqueNum } from "./utils";
 interface TestCase {
@@ -8,7 +14,7 @@ interface TestCase {
 }
 
 // sortAndCountInversionsTesting();
-quickSortTesting();
+// quickSortTesting();
 // testPartitionArray();
 
 function sortAndCountInversionsTesting() {
@@ -67,6 +73,7 @@ function quickSortTesting() {
   let test = 0;
   while (test < numberOfTests) {
     const testArray = randomUniqueNum(1000, 750);
+    // const testArray = [3, 8, 2, 5, 1, 4, 7, 6];
     const testArrayCopy = [...testArray];
     const testArrayObject: NumberObject[] = testArray.map((e) => ({
       number: e,
@@ -79,7 +86,12 @@ function quickSortTesting() {
       ({ number: numberA }, { number: numberB }) => numberA - numberB
     );
     initialiseGlobalArray(testArrayObject);
+    // console.info(
+    //   `beginning: number of comparisons: ${getNumberOfComparisons()}`
+    // );
+    addNumberOfComparions(testArrayObject.length - 1);
     quickSort(testArrayObject)!;
+    // console.info(`end: number of comparisons: ${getNumberOfComparisons()}`);
     if (jsSort.length !== testArrayObject.length) {
       throw new Error("Wrong length");
     }
@@ -94,10 +106,10 @@ function quickSortTesting() {
 }
 
 function testPartitionArray() {
-  const numberOfTests = 100;
+  const numberOfTests = 1000;
   let test = 1;
   while (test <= numberOfTests) {
-    const testArray = randomUniqueNum(10, 8);
+    const testArray = randomUniqueNum(1000, 712);
     // const testArray = [3, 8, 2, 5, 1, 4, 7, 6];
     const testArrayObject: NumberObject[] = testArray.map((e) => ({
       number: e,

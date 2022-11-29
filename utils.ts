@@ -22,3 +22,9 @@ export function swap(arr: NumberObject[], posA: number, posB: number) {
   arr[posB].number = arr[posA].number;
   arr[posA].number = temp;
 }
+
+export const determineMiddle = (length: number) =>
+  length % 2 === 0 ? length / 2 - 1 : Math.floor(length / 2);
+
+export const determineMedian = (a: number, b: number, c: number) =>
+  [a, b, c].sort((a, b) => a - b)[1];

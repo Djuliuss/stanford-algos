@@ -1,8 +1,25 @@
 import fs from "fs/promises";
+import {
+  addNumberOfComparions,
+  getNumberOfComparisons,
+  quickSort,
+} from "./quickSort";
+import { NumberObject } from "./types";
 
 async function getNumbers() {
   try {
     const data = await fs.readFile("numbers.txt", { encoding: "utf8" });
+    const parsedNumbers = data.split("\n");
+    parsedNumbers.pop();
+    return parsedNumbers;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function getNumbersForQuickSort() {
+  try {
+    const data = await fs.readFile("quickSort.txt", { encoding: "utf8" });
     const parsedNumbers = data.split("\n");
     parsedNumbers.pop();
     return parsedNumbers;
@@ -81,10 +98,25 @@ const mergeAndCountSplitInversions = (
     numberInversions: splitInversions,
   };
 };
-
+// SORT AND COUNT INVERSIONS
 // (async () => {
-//   const numbers = await getNumbers();
+//   const numbers = await getNumbersForQuickSort();
+
 //   const numbersFixed = numbers?.map((e) => Number(e).toString());
 //   const response = sortAndCountInversions(numbersFixed!);
 //   console.info(`number of inversion is ${response.numberInversions}`);
 // })();
+
+// QUICKSORT
+(async () => {
+  const numbers = await getNumbersForQuickSort();
+
+  const numbersFixed = numbers?.map((e) => Number(e));
+  const testArrayObject: NumberObject[] = numbersFixed!.map((e) => ({
+    number: e,
+  }));
+  console.info(`beginning: number of comparisons: ${getNumberOfComparisons()}`);
+  addNumberOfComparions(testArrayObject.length - 1);
+  quickSort(testArrayObject);
+  console.info(`end: number of comparisons: ${getNumberOfComparisons()}`);
+})();
