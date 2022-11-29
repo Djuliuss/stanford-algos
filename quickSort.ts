@@ -2,7 +2,7 @@
 //   return arr.sort();
 // };
 
-import { NumberObject, selectPivot } from "./types";
+import { NumberObject } from "./types";
 import { swap } from "./utils";
 
 // console.info(quickSort([5, 1, 7, 2, 4]));
