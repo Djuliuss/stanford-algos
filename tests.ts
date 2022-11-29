@@ -1,5 +1,6 @@
 import { sortAndCountInversions } from "./numberInversions";
-import { partitionArray } from "./quickSort";
+import { initialiseGlobalArray, partitionArray, quickSort } from "./quickSort";
+import { NumberObject } from "./types";
 import { randomUniqueNum } from "./utils";
 interface TestCase {
   numbers: string[];
@@ -7,8 +8,8 @@ interface TestCase {
 }
 
 // sortAndCountInversionsTesting();
-// quickSortTesting();
-testPartitionArray();
+quickSortTesting();
+// testPartitionArray();
 
 function sortAndCountInversionsTesting() {
   const testCase1 = {
@@ -61,27 +62,39 @@ function sortAndCountInversionsTesting() {
   });
 }
 
-// function quickSortTesting() {
-//   const numberOfTests = 100;
-//   let test = 0;
-//   while (test < numberOfTests) {
-//     const testArray = randomUniqueNum(10, 8);
-//     const quickSortedArray = quickSort(testArray)!;
-//     const jsSort = testArray.sort();
-//     if (jsSort.length !== quickSortedArray.length) {
-//       // JD!!! improve
-//       throw new Error("Wrong length");
-//     }
-//     for (let i = 0; i < quickSortedArray.length; i++) {
-//       // JD!!! imrpove
-//       if (quickSortedArray[i] !== jsSort[i]) {
-//         throw new Error("wrong value");
-//       }
-//     }
-//     console.info(`test ${test} sucessful`);
-//     test++;
-//   }
-// }
+function quickSortTesting() {
+  const numberOfTests = 1000;
+  let test = 0;
+  while (test < numberOfTests) {
+    const testArray = randomUniqueNum(1000, 750);
+    // const testArray = [3, 8, 2, 5, 1, 4, 7, 6];
+    const testArrayCopy = [...testArray];
+    const testArrayObject: NumberObject[] = testArray.map((e) => ({
+      number: e,
+    }));
+    const copyTestArrayObj: NumberObject[] = testArrayCopy.map((e) => ({
+      number: e,
+    }));
+
+    const jsSort = copyTestArrayObj.sort(
+      ({ number: numberA }, { number: numberB }) => numberA - numberB
+    );
+    initialiseGlobalArray(testArrayObject);
+    quickSort(testArrayObject)!;
+    if (jsSort.length !== testArrayObject.length) {
+      // JD!!! improve
+      throw new Error("Wrong length");
+    }
+    for (let i = 0; i < testArrayObject.length; i++) {
+      // JD!!! imrpove
+      if (testArrayObject[i].number !== jsSort[i].number) {
+        throw new Error("wrong value");
+      }
+    }
+    console.info(`test ${test} sucessful`);
+    test++;
+  }
+}
 
 function testPartitionArray() {
   const numberOfTests = 100;
@@ -89,19 +102,22 @@ function testPartitionArray() {
   while (test <= numberOfTests) {
     const testArray = randomUniqueNum(10, 8);
     // const testArray = [3, 8, 2, 5, 1, 4, 7, 6];
-    const partitionedArrayIndex = partitionArray(testArray);
-    validateArray(testArray, partitionedArrayIndex);
+    const testArrayObject: NumberObject[] = testArray.map((e) => ({
+      number: e,
+    }));
+    const partitionedArrayIndex = partitionArray(testArrayObject);
+    validateArray(testArrayObject, partitionedArrayIndex);
     console.info(`Succesfull testing ${test}`);
     test++;
   }
 }
 
-function validateArray(arr: number[], partitionArrayIndex: number) {
-  const pivotValue = arr[partitionArrayIndex];
+function validateArray(arr: NumberObject[], partitionArrayIndex: number) {
+  const pivotValue = arr[partitionArrayIndex].number;
   for (let index = 0; index < arr.length; index++) {
     const element = arr[index];
     if (index < partitionArrayIndex) {
-      if (element > pivotValue) {
+      if (element.number > pivotValue) {
         throw new Error(
           `Value ${element} in position ${index} is higher than ${pivotValue}`
         );
@@ -109,7 +125,7 @@ function validateArray(arr: number[], partitionArrayIndex: number) {
     } else if (index === partitionArrayIndex) {
       // continue
     } else {
-      if (element < pivotValue) {
+      if (element.number < pivotValue) {
         throw new Error(
           `Value ${element} in position ${index} is lower than ${pivotValue}`
         );

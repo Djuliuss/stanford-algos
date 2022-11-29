@@ -1,3 +1,5 @@
+import { NumberObject } from "./types";
+
 export function randomUniqueNum(range: number, outputCount: number) {
   let arr = [];
   for (let i = 1; i <= range; i++) {
@@ -15,8 +17,8 @@ export function randomUniqueNum(range: number, outputCount: number) {
   return result;
 }
 
-export function swap(arr: any[], posA: number, posB: number) {
-  const temp = arr[posB];
-  arr[posB] = arr[posA];
-  arr[posA] = temp;
+export function swap(arr: NumberObject[], posA: number, posB: number) {
+  const temp = arr[posB].number;
+  arr[posB].number = arr[posA].number;
+  arr[posA].number = temp;
 }
