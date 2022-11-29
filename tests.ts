@@ -67,7 +67,6 @@ function quickSortTesting() {
   let test = 0;
   while (test < numberOfTests) {
     const testArray = randomUniqueNum(1000, 750);
-    // const testArray = [3, 8, 2, 5, 1, 4, 7, 6];
     const testArrayCopy = [...testArray];
     const testArrayObject: NumberObject[] = testArray.map((e) => ({
       number: e,
@@ -82,16 +81,14 @@ function quickSortTesting() {
     initialiseGlobalArray(testArrayObject);
     quickSort(testArrayObject)!;
     if (jsSort.length !== testArrayObject.length) {
-      // JD!!! improve
       throw new Error("Wrong length");
     }
     for (let i = 0; i < testArrayObject.length; i++) {
-      // JD!!! imrpove
       if (testArrayObject[i].number !== jsSort[i].number) {
         throw new Error("wrong value");
       }
     }
-    console.info(`test ${test} sucessful`);
+    test % 100 === 0 && console.info(`test ${test} sucessful`);
     test++;
   }
 }
