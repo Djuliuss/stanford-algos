@@ -2,42 +2,70 @@ function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
 }
 
-interface Vortex {
-  adjacents: number[];
-  subVertices: Vortex[];
-}
-
 class Graph {
-  vertices: { [key: number]: Vortex };
+  edges: { [vortex: number]: number[] };
+  nextVortex: number;
   constructor() {
-    this.vertices = {};
+    this.edges = {};
+    this.nextVortex = 1;
   }
 
-  public addVortex(number: number, adjacents: number[]) {
-    if (this.vertices[number]) {
-      throw new Error(`This node already exists in the graph`);
+  public addVortex(vortex: number, adjacents: number[]) {
+    if (vortex !== this.nextVortex) {
+      throw new Error(`invalid vortex number`);
     }
-    this.vertices[number] = { adjacents, subVertices: [] };
+    this.edges[vortex] = adjacents;
+    this.nextVortex++;
   }
 
-  public contractEdge() {
-    // 1 Select an edge randomly
-    const randomVortexNumber = getRandomInt(Object.keys(this.vertices).length);
-    const adjacentsFromRandomVortex =
-      this.vertices[randomVortexNumber].adjacents;
-    const randomAdjacentIndex = getRandomInt(adjacentsFromRandomVortex.length);
-    const randomAdjacent = adjacentsFromRandomVortex[randomAdjacentIndex];
+  public workOutMinimumCut() {
+    while (this.getAllVertices().length > 2) {
+      this.contractRandomEdge;
+    }
+  }
 
-    // 2 FuseEdge
-    // 2.1 remove Edge from Vortex A
-    this.vertices[randomVortexNumber].adjacents =
-      adjacentsFromRandomVortex.filter(
-        (_, index) => index !== randomAdjacentIndex
-      );
-    // 2.2 remove Edge from Vortex B
-    const adjacentsVortexB = this.vertices[randomAdjacent].adjacents;
-    this.vertices[randomAdjacent].adjacents = adjacentsVortexB.filter(
-      (vortex) => vortex !== randomVortexNumber
+  private contractRandomEdge() {
+    const { vortexArandomEdge, vortexBrandomEdge } = this.getRandomEdge();
+    const edgesBeginningInVortexA = this.edges[vortexArandomEdge];
+    const edgesBeginningInVortexB = this.edges[vortexBrandomEdge];
+    const edgesNewSuperNode = [
+      ...edgesBeginningInVortexA,
+      ...edgesBeginningInVortexB,
+    ].filter((e) => ![vortexArandomEdge, vortexBrandomEdge].includes(e));
+    const newSuperNode = this.nextVortex;
+    this.addVortex(newSuperNode, edgesNewSuperNode);
+    delete (this.edges as any).vortexArandomEdge;
+    delete (this.edges as any).vortexBrandomEdge;
+    this.getAllVertices().forEach((e) => {
+      if (e !== newSuperNode) {
+        this.replaceVortexEdgeValues(e, vortexArandomEdge, newSuperNode);
+        this.replaceVortexEdgeValues(e, vortexBrandomEdge, newSuperNode);
+      }
+    });
+  }
+
+  private getRandomEdge() {
+    const ramomIndexVortexA = getRandomInt(this.getAllVertices().length);
+    const randomVortexA = this.getAllVertices()[ramomIndexVortexA];
+    const randomIndexVortexB = getRandomInt(this.edges[randomVortexA].length);
+    const randomVortexB = this.edges[ramomIndexVortexA][randomIndexVortexB];
+    return {
+      vortexArandomEdge: randomVortexA,
+      vortexBrandomEdge: randomVortexB,
+    };
+  }
+
+  private replaceVortexEdgeValues(
+    vortex: number,
+    oldEdge: number,
+    newEdge: number
+  ) {
+    this.edges[vortex] = this.edges[vortex].map((e) =>
+      e === oldEdge ? newEdge : e
     );
+  }
+
+  private getAllVertices() {
+    return Object.keys(this.edges).map(Number);
   }
 }
