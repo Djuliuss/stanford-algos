@@ -18,6 +18,8 @@ export class Graph {
     this.nextVortex++;
   }
 
+  // JD!!!
+  // needs to be improved. it should probably work out the data without tampering with the initial values
   public workOutMinimumCut() {
     while (this.getAllVertices().length > 2) {
       this.contractRandomEdge();
