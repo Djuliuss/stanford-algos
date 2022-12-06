@@ -2,7 +2,7 @@ function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
 }
 
-class Graph {
+export class Graph {
   edges: { [vortex: number]: number[] };
   nextVortex: number;
   constructor() {
@@ -20,8 +20,9 @@ class Graph {
 
   public workOutMinimumCut() {
     while (this.getAllVertices().length > 2) {
-      this.contractRandomEdge;
+      this.contractRandomEdge();
     }
+    return this.edges[this.getAllVertices()[0]].length;
   }
 
   private contractRandomEdge() {
@@ -34,8 +35,16 @@ class Graph {
     ].filter((e) => ![vortexArandomEdge, vortexBrandomEdge].includes(e));
     const newSuperNode = this.nextVortex;
     this.addVortex(newSuperNode, edgesNewSuperNode);
-    delete (this.edges as any).vortexArandomEdge;
-    delete (this.edges as any).vortexBrandomEdge;
+    // delete (this.edges as any).vortexArandomEdge;
+    // delete (this.edges as any).vortexBrandomEdge;
+    const newEdges: { [vortex: number]: number[] } = {};
+    this.getAllVertices().forEach((e) => {
+      if (![vortexArandomEdge, vortexBrandomEdge].includes(e)) {
+        newEdges[e] = this.edges[e];
+      }
+    });
+    this.edges = newEdges;
+
     this.getAllVertices().forEach((e) => {
       if (e !== newSuperNode) {
         this.replaceVortexEdgeValues(e, vortexArandomEdge, newSuperNode);
@@ -48,7 +57,7 @@ class Graph {
     const ramomIndexVortexA = getRandomInt(this.getAllVertices().length);
     const randomVortexA = this.getAllVertices()[ramomIndexVortexA];
     const randomIndexVortexB = getRandomInt(this.edges[randomVortexA].length);
-    const randomVortexB = this.edges[ramomIndexVortexA][randomIndexVortexB];
+    const randomVortexB = this.edges[randomVortexA][randomIndexVortexB];
     return {
       vortexArandomEdge: randomVortexA,
       vortexBrandomEdge: randomVortexB,

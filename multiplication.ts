@@ -29,12 +29,12 @@ const getTwoParts = (arr: string[], length: number) => {
   return [partOne, partTwo];
 };
 
-console.info(
-  karatsuba(
-    "3141592653589793238462643383279502884197169399375105820974944592",
-    "2718281828459045235360287471352662497757247093699959574966967627"
-  )
-);
+// console.info(
+//   karatsuba(
+//     "3141592653589793238462643383279502884197169399375105820974944592",
+//     "2718281828459045235360287471352662497757247093699959574966967627"
+//   )
+// );
 
 function equalizeLength(arr1: string[], arr2: string[]) {
   if (arr1.length === arr2.length) {
