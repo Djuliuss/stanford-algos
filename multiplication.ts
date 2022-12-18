@@ -15,10 +15,6 @@ const karatsuba = (x: string, y: string): string => {
     new BigNumber(a.join("")).plus(b.join("")).toFixed(),
     new BigNumber(c.join("")).plus(d.join("")).toFixed()
   );
-  const midSecondTerm = new BigNumber(aplusBtimesCplusD).minus(bd).minus(ac);
-  const firstTerm = new BigNumber(10).pow(length).times(ac);
-  const secondTerm = new BigNumber(10).pow(length / 2).times(midSecondTerm);
-  const result = firstTerm.plus(secondTerm).plus(bd);
   const response = result.toFixed();
   return response;
 };
@@ -34,7 +30,7 @@ const getTwoParts = (arr: string[], length: number) => {
 //     "3141592653589793238462643383279502884197169399375105820974944592",
 //     "2718281828459045235360287471352662497757247093699959574966967627"
 //   )
-// );
+// );|Hello WorldHello WorldHello WorldHello WorldHello
 
 function equalizeLength(arr1: string[], arr2: string[]) {
   if (arr1.length === arr2.length) {
