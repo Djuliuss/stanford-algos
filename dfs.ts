@@ -1,3 +1,5 @@
+import { start } from "repl";
+
 interface Graph {
   [node: number]: number[];
 }
@@ -33,4 +35,15 @@ const dfs = (graph: Graph) => {
   }
 };
 
-dfs(graph);
+const recursiveDfs = (graph: Graph, interationVortex: number) => {
+  console.info(`explored node ${interationVortex}`);
+  exploredVertices[interationVortex] = true;
+  const adjacentVertices = graph[interationVortex];
+  adjacentVertices.forEach((vortex) => {
+    if (!exploredVertices[vortex]) {
+      recursiveDfs(graph, vortex);
+    }
+  });
+};
+
+recursiveDfs(graph, 1);
