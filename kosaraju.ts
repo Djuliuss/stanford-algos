@@ -1,54 +1,92 @@
-interface DirectedGraph {
-  [node: number]: number[];
-}
+import { Console } from "console";
+import {
+  DirectedGraph,
+  FinishingTimes,
+  LeaderVertices,
+  VortexTreated,
+} from "./kosarajuTypes";
+import { deleteContentObject, invertGraph } from "./kosarajuUtils";
+import { graph, invertedGraph } from "./testData";
 
-interface FinishingTimes {
-  [node: number]: number;
-}
+let exploredVertices: VortexTreated = {};
 
-const finishingTimes: FinishingTimes = {};
+let finishingTimes: FinishingTimes = {};
 
-const directedGraph: DirectedGraph = {
-  1: [2, 3],
-  2: [3, 4],
-  3: [5],
-  4: [5, 6],
-  5: [6],
-  6: [],
-};
+let leaderVertices: LeaderVertices = {};
 
-const invertGraph = (dgraph: DirectedGraph) => {
-  const intevertedGraph: DirectedGraph = {};
-  Object.keys(dgraph).forEach((node) => {
-    if (!intevertedGraph[Number(node)]) {
-      intevertedGraph[Number(node)] = [];
-    }
-    const arcs = dgraph[Number(node)];
-    arcs.forEach((arc) => {
-      intevertedGraph[arc]
-        ? intevertedGraph[arc].push(Number(node))
-        : (intevertedGraph[arc] = [Number(node)]);
+let finishingTime = 0;
+let leader: number | undefined = undefined;
+
+const recursiveDfs = (graph: DirectedGraph, iterationVortex: number) => {
+  if (exploredVertices[iterationVortex]) {
+    // continue
+  } else {
+    exploredVertices[iterationVortex] = true;
+    leaderVertices[iterationVortex] = leader!;
+    const adjacentVertices = graph[iterationVortex];
+    adjacentVertices.forEach((vortex) => {
+      if (!exploredVertices[vortex]) {
+        recursiveDfs(graph, vortex);
+      }
     });
-  });
-  return intevertedGraph;
-};
-
-const invertedGraph = invertGraph(directedGraph);
-
-const kosaraju = (graph: DirectedGraph) => {
-  // JD!!!
-  // for now let's just work out the finishing times of the input graph
-  let finishingTimes = 0;
-  const firstVortex = Number(Object.keys(graph)[0]);
-  vortexStack.push(firstVortex);
-  while (vortexStack.length > 0) {
-    const lastVortexInStack = vortexStack.pop()!;
-    exploredVertices[lastVortexInStack] = true;
-    const adjacentVertices = graph[lastVortexInStack];
-    adjacentVertices.forEach(
-      (e) =>
-        !exploredVertices[e] && !vortexStack.includes(e) && vortexStack.push(e)
-    );
-    console.info(`processed vortex ${lastVortexInStack}`);
+    finishingTimes[finishingTime++] = iterationVortex;
   }
 };
+
+const initialiseLoop = () => {
+  finishingTime = 0;
+  leader = undefined;
+  deleteContentObject(exploredVertices);
+  deleteContentObject(leaderVertices);
+  deleteContentObject(finishingTimes);
+};
+
+const kosaraju = (graph: DirectedGraph) => {
+  // STEP 1
+
+  const invertedGraph = invertGraph(graph);
+  const vortexInvertedGraphInDecreasingOrder =
+    Object.keys(invertedGraph).reverse();
+
+  // STEP 2
+  initialiseLoop();
+
+  vortexInvertedGraphInDecreasingOrder.forEach((vortexInvertedGraph) => {
+    const vortexInvertedGraphNumber = Number(vortexInvertedGraph);
+    leader = vortexInvertedGraphNumber;
+    recursiveDfs(invertedGraph, vortexInvertedGraphNumber);
+  });
+
+  // STEP 3
+
+  const verticesOrderedByFinishingTimeDesc = Object.keys(finishingTimes)
+    .reverse()
+    .map((e) => finishingTimes[Number(e)]);
+
+  initialiseLoop();
+  verticesOrderedByFinishingTimeDesc.forEach((vortex) => {
+    console.info(`PROCESSING VORTEX NUMBER ${vortex}`);
+    leader = vortex;
+    recursiveDfs(graph, vortex);
+  });
+};
+
+kosaraju(graph);
+// JD!!!
+// ANY
+const strictlyConnectedComponents: any = {};
+Object.keys(leaderVertices).forEach((key) => {
+  const leader = leaderVertices[Number(key)];
+  const verticesForThisLeader = strictlyConnectedComponents[leader]
+    ? strictlyConnectedComponents[leader].concat(key)
+    : [key];
+  strictlyConnectedComponents[leader] = verticesForThisLeader;
+});
+
+console.error(
+  `JD!!! kosaraju.ts 116. The value of strictlyConnectedComponents is ${JSON.stringify(
+    strictlyConnectedComponents,
+    null,
+    2
+  )} `
+);
