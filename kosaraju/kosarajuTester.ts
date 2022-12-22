@@ -19,6 +19,7 @@ const testFileNames = [
 ];
 
 (async () => {
+  let [error, success] = [0, 0];
   for (const testFileName of testFileNames) {
     const inputFile = `./kosaraju/testCases/input_mostlyCycles_${testFileName}.txt`;
     const outputFile = `./kosaraju/testCases/output_mostlyCycles_${testFileName}.txt`;
@@ -28,10 +29,13 @@ const testFileNames = [
       console.error(
         `test ${testFileName} failed response ${response} expectedResult ${expectedResult}`
       );
+      error++;
     } else {
       console.info(`SUCCESSFUL TEST!!! ${testFileName}`);
+      success++;
     }
   }
+  console.info(`RESULTS OF TESTS SUCCESS: ${success} ERRORS: ${error}`);
 })();
 
 async function fetchExpectedResult(filename: string) {

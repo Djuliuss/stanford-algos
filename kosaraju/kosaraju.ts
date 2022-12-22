@@ -37,6 +37,13 @@ async function getGraph(filename: string) {
         }
       });
     });
+    // add vortex that have no arcs
+    const maxVortex = Math.max(...Object.keys(graph).map(Number));
+    for (let index = 1; index < maxVortex; index++) {
+      if (!graph[index]) {
+        graph[index] = [];
+      }
+    }
 
     return graph;
   } catch (err) {
