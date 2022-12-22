@@ -1,3 +1,4 @@
+import { resolve } from "path";
 import { DirectedGraph } from "./kosarajuTypes";
 
 const getTotalArcs = (graph: DirectedGraph) => {
@@ -51,13 +52,14 @@ export const deleteContentObject = (object: any) => {
 };
 
 export const identicalArrays = (arr1: any[], arr2: any[]) => {
+  let response = true;
   if (arr1.length !== arr2.length) {
-    throw new Error(`Different lengths`);
+    response = false;
   }
   arr1.forEach((el, index) => {
     if (arr2[index] !== el) {
-      throw new Error(`item in position ${index} should be ${el}`);
+      response = false;
     }
   });
-  return true;
+  return response;
 };
