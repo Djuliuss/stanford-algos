@@ -21,7 +21,7 @@ let globalMinimumCut = 10000000;
     const numbers: any = await getNumbers();
     const graph = new Graph();
     numbers.forEach((row: any) => {
-      const numbersRow = row.split("\t").map(Number);
+      const numbersRow = row.split(";").map(Number);
       numbersRow.pop();
       graph.addVortex(numbersRow[0], numbersRow.slice(1));
     });

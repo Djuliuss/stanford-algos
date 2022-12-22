@@ -1,4 +1,4 @@
-import { DirectedGraph } from "./kosarajuTypes";
+import { DirectedGraph } from "./kosaraju/kosarajuTypes";
 
 export const graph: DirectedGraph = {
   1: [4],

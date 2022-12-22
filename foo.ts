@@ -1,5 +1,4 @@
-const obj = { a: "foo", 2: "bar", 4: "bAZ" };
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-console.info(Object.keys(obj));
-delete (obj as any).a;
-console.info(Object.keys(obj));
+const firstOnes = arr.slice(0, 5);
+console.info(firstOnes);
