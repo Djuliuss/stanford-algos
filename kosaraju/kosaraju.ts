@@ -99,6 +99,8 @@ const kosaraju = async (graph: DirectedGraph) => {
 
   console.info(`begin with step 2`);
 
+  let inStack: VortexTreated = {};
+
   for (const vortexInvertedGraph of vortexInvertedGraphInDecreasingOrder) {
     const vortexInvertedGraphNumber = Number(vortexInvertedGraph);
     if (!exploredVertices[vortexInvertedGraphNumber]) {
@@ -115,15 +117,21 @@ const kosaraju = async (graph: DirectedGraph) => {
         if (haveAllBeenProccessedAlready) {
           finishingTime++;
           finishingTimes[finishingTime] = lastVortexInStack;
+          if (finishingTime % 2000 === 0) {
+            console.info(
+              `step 2 just worked out finished time ${finishingTime}`
+            );
+          }
           if (predecessorVertices[lastVortexInStack]) {
             vortexStack.push(predecessorVertices[lastVortexInStack]);
           }
         } else {
           adjacentVertices.forEach((e) => {
-            if (!exploredVertices[e] && !vortexStack.includes(e)) {
+            if (!exploredVertices[e] && !inStack[e]) {
               vortexStack.push(e);
               leaderVertices[e] = leader!;
               predecessorVertices[e] = lastVortexInStack;
+              inStack[e] = true;
             }
           });
         }
@@ -135,6 +143,7 @@ const kosaraju = async (graph: DirectedGraph) => {
 
   console.info(`begin with step 3`);
 
+  inStack = {};
   const verticesOrderedByFinishingTimeDesc = Object.keys(finishingTimes)
     .reverse()
     .map((e) => finishingTimes[Number(e)]);
@@ -157,15 +166,21 @@ const kosaraju = async (graph: DirectedGraph) => {
         if (haveAllBeenProccessedAlready) {
           finishingTime++;
           finishingTimes[finishingTime] = lastVortexInStack;
+          if (finishingTime % 2000 === 0) {
+            console.info(
+              `step 3 just worked out finished time ${finishingTime}`
+            );
+          }
           if (predecessorVertices[lastVortexInStack]) {
             vortexStack.push(predecessorVertices[lastVortexInStack]);
           }
         } else {
           adjacentVertices.forEach((e) => {
-            if (!exploredVertices[e] && !vortexStack.includes(e)) {
+            if (!exploredVertices[e] && !inStack[e]) {
               vortexStack.push(e);
               leaderVertices[e] = leader!;
               predecessorVertices[e] = lastVortexInStack;
+              inStack[e] = true;
             }
           });
         }
