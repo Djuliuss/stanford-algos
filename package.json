@@ -15,6 +15,10 @@
     "@types/node": "^18.11.9",
     "bignumber.js": "^9.1.0",
     "chai": "^4.3.7",
-    "mocha": "^10.1.0"
+    "mocha": "^10.1.0",
+    "n-readlines": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/n-readlines": "^1.0.3"
   }
 }

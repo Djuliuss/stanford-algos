@@ -7,6 +7,7 @@ import {
   VortexTreated,
 } from "./kosarajuTypes";
 import { deleteContentObject, invertGraph } from "./kosarajuUtils";
+const nReadlines = require("n-readlines");
 
 let exploredVertices: VortexTreated = {};
 
@@ -23,17 +24,21 @@ let leader: number | undefined = undefined;
 
 async function getGraph(filename: string) {
   try {
-    const data = await fs.readFile(filename, {
-      encoding: "utf8",
-    });
-    const parsedNumbers = data.split("\n");
-    // parsedNumbers.pop();
     const graph: DirectedGraph = {};
-    parsedNumbers.forEach((row: any) => {
-      const numbersRow = row.split(" ").map(Number);
+    const broadbandLines = new nReadlines(filename);
+    let line;
+    let maxVortex = 0;
+
+    while ((line = broadbandLines.next())) {
+      const numbersRow = line.toString("ascii").split(" ").map(Number);
       const [vortex, ...arcs] = numbersRow;
-      graph[vortex] = graph[vortex] ? graph[vortex].concat(arcs) : [...arcs];
-    });
+      if (!graph[vortex]) {
+        graph[vortex] = [];
+      }
+      graph[vortex].push(...arcs);
+      arcs.forEach((e: any) => (maxVortex = e > maxVortex ? e : maxVortex));
+    }
+
     // add all missing vertices
     Object.values(graph).forEach((arcs) => {
       arcs.forEach((arc: any) => {
@@ -43,13 +48,12 @@ async function getGraph(filename: string) {
       });
     });
     // add vortex that have no arcs
-    const maxVortex = Math.max(...Object.keys(graph).map(Number));
+
     for (let index = 1; index < maxVortex; index++) {
       if (!graph[index]) {
         graph[index] = [];
       }
     }
-
     return graph;
   } catch (err) {
     console.log(err);
@@ -84,7 +88,7 @@ const initialiseLoop = () => {
 
 const kosaraju = async (graph: DirectedGraph) => {
   // STEP 1
-
+  console.info(`about to invert the graph`);
   const invertedGraph = invertGraph(graph);
   console.info(`I have inverted the graph`);
   const vortexInvertedGraphInDecreasingOrder =
@@ -177,11 +181,7 @@ export const processKosarajuOnFile = async (filename: string) => {
   await kosaraju(graph!);
   console.info(`finished with kosaraju`);
   const strictlyConnectedComponents: any = {};
-  let i = 0;
   Object.keys(leaderVertices).forEach((key) => {
-    if (i++ % 1000 === 0) {
-      console.info(`now i is ${i}`);
-    }
     const leader = leaderVertices[Number(key)];
     if (!strictlyConnectedComponents[leader]) {
       strictlyConnectedComponents[leader] = [];
