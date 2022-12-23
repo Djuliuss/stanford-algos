@@ -2,9 +2,6 @@ import { processKosarajuOnFile } from "./kosaraju";
 import fs from "fs/promises";
 import { identicalArrays } from "./kosarajuUtils";
 
-// input_mostlyCycles_1_8
-// output_mostlyCycles_1_8
-
 const testFileNames = [
   "1_8",
   "2_8",
@@ -16,6 +13,16 @@ const testFileNames = [
   "8_16",
   "9_32",
   "10_32",
+  "11_32",
+  "12_32",
+  "13_64",
+  "14_64",
+  "15_64",
+  "16_64",
+  "17_128",
+  "18_128",
+  "19_128",
+  "20_128",
 ];
 
 (async () => {
