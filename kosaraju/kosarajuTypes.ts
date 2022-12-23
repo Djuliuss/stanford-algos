@@ -10,6 +10,10 @@ export interface LeaderVertices {
   [node: number]: number;
 }
 
+export interface PredecessorVertices {
+  [node: number]: number;
+}
+
 export interface VortexTreated {
   [node: number]: boolean;
 }

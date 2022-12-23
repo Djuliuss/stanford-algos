@@ -3,6 +3,7 @@ import {
   DirectedGraph,
   FinishingTimes,
   LeaderVertices,
+  PredecessorVertices,
   VortexTreated,
 } from "./kosarajuTypes";
 import { deleteContentObject, invertGraph } from "./kosarajuUtils";
@@ -12,6 +13,10 @@ let exploredVertices: VortexTreated = {};
 let finishingTimes: FinishingTimes = {};
 
 let leaderVertices: LeaderVertices = {};
+
+let predecessorVertices: PredecessorVertices = {};
+
+let vortexStack: number[] = [];
 
 let finishingTime = 0;
 let leader: number | undefined = undefined;
@@ -70,9 +75,11 @@ const recursiveDfs = async (graph: DirectedGraph, iterationVortex: number) => {
 const initialiseLoop = () => {
   finishingTime = 0;
   leader = undefined;
+  vortexStack = [];
   deleteContentObject(exploredVertices);
   deleteContentObject(leaderVertices);
   deleteContentObject(finishingTimes);
+  deleteContentObject(predecessorVertices);
 };
 
 const kosaraju = async (graph: DirectedGraph) => {
@@ -90,11 +97,34 @@ const kosaraju = async (graph: DirectedGraph) => {
 
   for (const vortexInvertedGraph of vortexInvertedGraphInDecreasingOrder) {
     const vortexInvertedGraphNumber = Number(vortexInvertedGraph);
-    if (vortexInvertedGraphNumber % 1000 === 0) {
-      console.info(`about to begin with node ${vortexInvertedGraphNumber}`);
+    if (!exploredVertices[vortexInvertedGraphNumber]) {
+      vortexStack.push(vortexInvertedGraphNumber);
+      leader = vortexInvertedGraphNumber;
+      leaderVertices[vortexInvertedGraphNumber] = leader;
+      while (vortexStack.length > 0) {
+        const lastVortexInStack = vortexStack.pop()!;
+        exploredVertices[lastVortexInStack] = true;
+        const adjacentVertices = invertedGraph[lastVortexInStack];
+        const haveAllBeenProccessedAlready = adjacentVertices.every(
+          (e) => exploredVertices[e]
+        );
+        if (haveAllBeenProccessedAlready) {
+          finishingTime++;
+          finishingTimes[finishingTime] = lastVortexInStack;
+          if (predecessorVertices[lastVortexInStack]) {
+            vortexStack.push(predecessorVertices[lastVortexInStack]);
+          }
+        } else {
+          adjacentVertices.forEach((e) => {
+            if (!exploredVertices[e] && !vortexStack.includes(e)) {
+              vortexStack.push(e);
+              leaderVertices[e] = leader!;
+              predecessorVertices[e] = lastVortexInStack;
+            }
+          });
+        }
+      }
     }
-    leader = vortexInvertedGraphNumber;
-    await recursiveDfs(invertedGraph, vortexInvertedGraphNumber);
   }
 
   // STEP 3
@@ -106,14 +136,37 @@ const kosaraju = async (graph: DirectedGraph) => {
     .map((e) => finishingTimes[Number(e)]);
 
   initialiseLoop();
-  let i = 0;
-  for (const vortex of verticesOrderedByFinishingTimeDesc) {
-    if (i++ % 1000 === 0) {
-      console.info(`second loop. beginning with node ${i}`);
-    }
-    leader = vortex;
 
-    await recursiveDfs(graph, vortex);
+  for (const vortex of verticesOrderedByFinishingTimeDesc) {
+    const vortexNumber = Number(vortex);
+    if (!exploredVertices[vortexNumber]) {
+      vortexStack.push(vortexNumber);
+      leader = vortexNumber;
+      leaderVertices[vortexNumber] = leader;
+      while (vortexStack.length > 0) {
+        const lastVortexInStack = vortexStack.pop()!;
+        exploredVertices[lastVortexInStack] = true;
+        const adjacentVertices = graph[lastVortexInStack];
+        const haveAllBeenProccessedAlready = adjacentVertices.every(
+          (e) => exploredVertices[e]
+        );
+        if (haveAllBeenProccessedAlready) {
+          finishingTime++;
+          finishingTimes[finishingTime] = lastVortexInStack;
+          if (predecessorVertices[lastVortexInStack]) {
+            vortexStack.push(predecessorVertices[lastVortexInStack]);
+          }
+        } else {
+          adjacentVertices.forEach((e) => {
+            if (!exploredVertices[e] && !vortexStack.includes(e)) {
+              vortexStack.push(e);
+              leaderVertices[e] = leader!;
+              predecessorVertices[e] = lastVortexInStack;
+            }
+          });
+        }
+      }
+    }
   }
 };
 
