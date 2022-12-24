@@ -86,76 +86,17 @@ const initialiseLoop = () => {
   deleteContentObject(predecessorVertices);
 };
 
-const kosaraju = async (graph: DirectedGraph) => {
-  // STEP 1
-  console.info(`about to invert the graph`);
-  const invertedGraph = invertGraph(graph);
-  console.info(`I have inverted the graph`);
-  const vortexInvertedGraphInDecreasingOrder =
-    Object.keys(invertedGraph).reverse();
-
-  // STEP 2
+const kosarajuLoop = async (graph: DirectedGraph, verticesOrder: number[]) => {
   initialiseLoop();
-
-  console.info(`begin with step 2`);
 
   let inStack: VortexTreated = {};
 
-  for (const vortexInvertedGraph of vortexInvertedGraphInDecreasingOrder) {
-    const vortexInvertedGraphNumber = Number(vortexInvertedGraph);
+  for (const vortex of verticesOrder) {
+    const vortexInvertedGraphNumber = Number(vortex);
     if (!exploredVertices[vortexInvertedGraphNumber]) {
       vortexStack.push(vortexInvertedGraphNumber);
       leader = vortexInvertedGraphNumber;
       leaderVertices[vortexInvertedGraphNumber] = leader;
-      while (vortexStack.length > 0) {
-        const lastVortexInStack = vortexStack.pop()!;
-        exploredVertices[lastVortexInStack] = true;
-        const adjacentVertices = invertedGraph[lastVortexInStack];
-        const haveAllBeenProccessedAlready = adjacentVertices.every(
-          (e) => exploredVertices[e]
-        );
-        if (haveAllBeenProccessedAlready) {
-          finishingTime++;
-          finishingTimes[finishingTime] = lastVortexInStack;
-          if (finishingTime % 2000 === 0) {
-            console.info(
-              `step 2 just worked out finished time ${finishingTime}`
-            );
-          }
-          if (predecessorVertices[lastVortexInStack]) {
-            vortexStack.push(predecessorVertices[lastVortexInStack]);
-          }
-        } else {
-          adjacentVertices.forEach((e) => {
-            if (!exploredVertices[e] && !inStack[e]) {
-              vortexStack.push(e);
-              leaderVertices[e] = leader!;
-              predecessorVertices[e] = lastVortexInStack;
-              inStack[e] = true;
-            }
-          });
-        }
-      }
-    }
-  }
-
-  // STEP 3
-
-  console.info(`begin with step 3`);
-
-  inStack = {};
-  const verticesOrderedByFinishingTimeDesc = Object.keys(finishingTimes)
-    .reverse()
-    .map((e) => finishingTimes[Number(e)]);
-
-  initialiseLoop();
-
-  for (const vortex of verticesOrderedByFinishingTimeDesc) {
-    const vortexNumber = Number(vortex);
-    if (!exploredVertices[vortexNumber]) {
-      vortexStack.push(vortexNumber);
-      leader = vortexNumber;
-      leaderVertices[vortexNumber] = leader;
       while (vortexStack.length > 0) {
         const lastVortexInStack = vortexStack.pop()!;
         exploredVertices[lastVortexInStack] = true;
@@ -164,13 +105,7 @@ const kosaraju = async (graph: DirectedGraph) => {
           (e) => exploredVertices[e]
         );
         if (haveAllBeenProccessedAlready) {
-          finishingTime++;
-          finishingTimes[finishingTime] = lastVortexInStack;
-          if (finishingTime % 2000 === 0) {
-            console.info(
-              `step 3 just worked out finished time ${finishingTime}`
-            );
-          }
+          finishingTimes[++finishingTime] = lastVortexInStack;
           if (predecessorVertices[lastVortexInStack]) {
             vortexStack.push(predecessorVertices[lastVortexInStack]);
           }
@@ -189,6 +124,31 @@ const kosaraju = async (graph: DirectedGraph) => {
   }
 };
 
+const kosaraju = async (graph: DirectedGraph) => {
+  // STEP 1
+  console.info(`about to invert the graph`);
+  const invertedGraph = invertGraph(graph);
+  console.info(`I have inverted the graph`);
+  const vortexInvertedGraphInDecreasingOrder = Object.keys(invertedGraph)
+    .reverse()
+    .map(Number);
+
+  // STEP 2
+  initialiseLoop();
+
+  await kosarajuLoop(invertedGraph, vortexInvertedGraphInDecreasingOrder);
+
+  // STEP 3
+
+  console.info(`begin with step 3`);
+
+  const verticesOrderedByFinishingTimeDesc = Object.keys(finishingTimes)
+    .reverse()
+    .map((e) => finishingTimes[Number(e)]);
+
+  await kosarajuLoop(graph, verticesOrderedByFinishingTimeDesc);
+};
+
 export const processKosarajuOnFile = async (filename: string) => {
   const graph = await getGraph(filename);
   console.info(`about to begin with kosaraju`);
@@ -202,10 +162,6 @@ export const processKosarajuOnFile = async (filename: string) => {
       strictlyConnectedComponents[leader] = [];
     }
     strictlyConnectedComponents[leader].push(key);
-    // const verticesForThisLeader = strictlyConnectedComponents[leader]
-    //   ? strictlyConnectedComponents[leader].concat(key)
-    //   : [key];
-    // strictlyConnectedComponents[leader] = verticesForThisLeader;
   });
   console.info(`working out totals`);
   const strictlyConnectedComponentsOrderedBySize = Object.values(
