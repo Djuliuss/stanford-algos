@@ -5,8 +5,8 @@ import {
   LeaderVertices,
   PredecessorVertices,
   VortexTreated,
-} from "./kosarajuTypes";
-import { deleteContentObject, invertGraph } from "./kosarajuUtils";
+} from "../kosaraju/kosarajuTypes";
+import { deleteContentObject, invertGraph } from "../kosaraju/kosarajuUtils";
 const nReadlines = require("n-readlines");
 
 let exploredVertices: VortexTreated = {};

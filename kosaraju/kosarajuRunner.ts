@@ -1,4 +1,4 @@
-import { processKosarajuOnFile } from "./kosaraju";
+import { processKosarajuOnFile } from "../course1/kosaraju";
 
 (async () => {
   const response = await processKosarajuOnFile(

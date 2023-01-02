@@ -1,4 +1,4 @@
-import { processKosarajuOnFile } from "./kosaraju";
+import { processKosarajuOnFile } from "../course1/kosaraju";
 import fs from "fs/promises";
 import { identicalArrays } from "./kosarajuUtils";
 
@@ -71,6 +71,7 @@ const testFileNames = [
   "66_320000",
   "67_320000",
   "68_320000",
+  E,
 ];
 
 (async () => {
@@ -86,6 +87,7 @@ const testFileNames = [
       );
       error++;
     } else {
+      E;
       console.info(`SUCCESSFUL TEST!!! ${testFileName}`);
       success++;
     }
