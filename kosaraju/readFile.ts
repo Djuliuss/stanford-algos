@@ -1,5 +1,5 @@
 import fs from "fs/promises";
-import { Graph } from "./kosaraju/graph";
+import { Graph } from "./graph";
 
 async function getNumbers() {
   try {
