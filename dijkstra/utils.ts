@@ -1,4 +1,5 @@
-import { Arc, Graph } from "./types";
+import { graph } from "../course1/testData";
+import { EdgeSet, EdgeVortex, Graph, VortexSet } from "./types";
 const nReadlines = require("n-readlines");
 
 export const getGraphFromFile = (filename: string) => {
@@ -10,7 +11,7 @@ export const getGraphFromFile = (filename: string) => {
     const [vortexId, ...arcs] = numbersRow;
     arcs.forEach((arcFile: any) => {
       const [arcHead, arcLength] = arcFile.split(",");
-      const arc: Arc = {
+      const arc: EdgeVortex = {
         head: arcHead,
         length: arcLength,
       };
@@ -25,4 +26,24 @@ export const getGraphFromFile = (filename: string) => {
     });
   }
   return graph;
+};
+
+export const getCrossingEdges = (
+  graph: Graph,
+  setX: VortexSet,
+  setVminusX: VortexSet
+): EdgeSet => {
+  const crossingEdges: EdgeSet = [];
+  const vortexIdsetVminusX = setVminusX.map(({ vortexId }) => vortexId);
+  for (const vortexX of setX) {
+    const { vortexId } = vortexX;
+    const edgesVortexX = graph[vortexId];
+    for (const edgeVorteX of edgesVortexX) {
+      const { head, length } = edgeVorteX;
+      if (vortexIdsetVminusX.includes(head)) {
+        crossingEdges.push({ head, tail: vortexId, length });
+      }
+    }
+  }
+  return crossingEdges;
 };
