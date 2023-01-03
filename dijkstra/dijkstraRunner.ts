@@ -1,6 +1,7 @@
 import { processKosarajuOnFile } from "../course1/kosaraju";
 import fs from "fs/promises";
 import { identicalArrays } from "./utils";
+import { getLengthsThroughDijskstraFromFile } from "./dijkstra";
 const nReadlines = require("n-readlines");
 
 const testFileNames = [
@@ -40,8 +41,8 @@ const testFileNames = [
   for (const testFileName of testFileNames) {
     const inputFile = `./dijkstra/testCases/input_random_${testFileName}.txt`;
     const outputFile = `./dijkstra/testCases/output_random_${testFileName}.txt`;
-    // const response = await processKosarajuOnFile(inputFile);
-    let response = [253, 172, 197, 242, 331, 402, 143, 272, 249, 265];
+    let response = await getLengthsThroughDijskstraFromFile(inputFile);
+
     if (testFileName === "exampleClass") {
       // continue
     } else {

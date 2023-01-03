@@ -1,4 +1,3 @@
-import { ifError } from "assert";
 import { EdgeSet, Graph, VortexSet } from "./types";
 import { getCrossingEdges, getMinDijkstraScoreEdge, INFINITY } from "./utils";
 const nReadlines = require("n-readlines");
@@ -22,7 +21,7 @@ export const getLengthsThroughDijskstraFromFile = async (filename: string) => {
       }
     });
   }
-  return graph;
+  return getLenghtsThroughDijkstra(graph, 1);
 };
 
 export const getLenghtsThroughDijkstra = (
