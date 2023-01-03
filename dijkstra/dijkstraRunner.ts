@@ -1,5 +1,6 @@
 import { processKosarajuOnFile } from "../course1/kosaraju";
 import fs from "fs/promises";
+import { identicalArrays } from "./utils";
 const nReadlines = require("n-readlines");
 
 const testFileNames = [
@@ -63,27 +64,9 @@ const testFileNames = [
 })();
 
 //  return shortest-path distances to the following ten vertices, in order: 7,37,59,82,99,115,133,165,188,197.
-
-async function fetchExpectedResult(filename: string) {
+export async function fetchExpectedResult(filename: string) {
   const broadbandLines = new nReadlines(filename);
   const line = broadbandLines.next();
   const shortestPaths = line.toString("ascii").split(",").map(Number);
   return shortestPaths;
-}
-
-function identicalArrays(arr1: any[], arr2: any[]) {
-  let response = true;
-  if (arr1.length !== arr2.length) {
-    console.error(`invalid length ${arr1.length} ${arr2.length}`);
-    response = false;
-  }
-  arr1.forEach((el, index) => {
-    if (arr2[index] !== el) {
-      console.error(
-        `Invalid value. Element ${index} in second array should be ${el} instead of ${arr2[index]}`
-      );
-      response = false;
-    }
-  });
-  return response;
 }

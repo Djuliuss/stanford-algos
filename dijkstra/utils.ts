@@ -52,8 +52,8 @@ export const getCrossingEdges = (
 
 export const getMinDijkstraScoreEdge = (edges: EdgeSet, lengths: number[]) => {
   let minDijkstraScore = INFINITY;
-  let tailMinDijkstraScore = undefined;
-  let headMinDijkstraScore = undefined;
+  let tailMinDijkstraScore = 0;
+  let headMinDijkstraScore = 0;
   edges.forEach(({ head, tail, length }) => {
     const dijkstraScore = lengths[tail - 1] + length;
     if (dijkstraScore < minDijkstraScore) {
@@ -64,3 +64,20 @@ export const getMinDijkstraScoreEdge = (edges: EdgeSet, lengths: number[]) => {
   });
   return { minDijkstraScore, tailMinDijkstraScore, headMinDijkstraScore };
 };
+
+export function identicalArrays(arr1: any[], arr2: any[]) {
+  let response = true;
+  if (arr1.length !== arr2.length) {
+    console.error(`invalid length ${arr1.length} ${arr2.length}`);
+    response = false;
+  }
+  arr1.forEach((el, index) => {
+    if (arr2[index] !== el) {
+      console.error(
+        `Invalid value. Element ${index} in second array should be ${el} instead of ${arr2[index]}`
+      );
+      response = false;
+    }
+  });
+  return response;
+}
