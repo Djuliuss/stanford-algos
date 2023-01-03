@@ -1,4 +1,5 @@
 import exp from "constants";
+import { getLenghtsThroughDijkstra } from "./dijkstra";
 import { EdgeSet, Graph, VortexSet } from "./types";
 import { getCrossingEdges, getMinDijkstraScoreEdge, INFINITY } from "./utils";
 
@@ -99,6 +100,15 @@ const tester = () => {
   }
 
   console.info(`test 2 succesful`);
+
+  const responseTest3 = getLenghtsThroughDijkstra(testGraph, 1);
+  console.error(
+    `JD!!! tester.ts 105. The value of responseTest3 is ${JSON.stringify(
+      responseTest3,
+      null,
+      2
+    )} `
+  );
 };
 
 tester();

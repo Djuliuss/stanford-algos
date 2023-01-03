@@ -24,10 +24,9 @@ export const getLenghtsThroughDijkstra = (
       getMinDijkstraScoreEdge(crossingEdges, lengths);
     setX.push({ vortexId: headMinDijkstraScore });
     setRminusX = setRminusX.filter(
-      ({ vortexId }) => vortexId === headMinDijkstraScore
+      ({ vortexId }) => vortexId !== headMinDijkstraScore
     );
-    lengths[headMinDijkstraScore - 1] =
-      lengths[tailMinDijkstraScore] + minDijkstraScore;
+    lengths[headMinDijkstraScore - 1] = minDijkstraScore;
     crossingEdges = getCrossingEdges(graph, setX, setRminusX);
   }
   return lengths;
