@@ -47,3 +47,18 @@ export const getCrossingEdges = (
   }
   return crossingEdges;
 };
+
+export const getMinDijkstraScoreEdge = (edges: EdgeSet, lengths: number[]) => {
+  let minDijkstraScore = 999999999999999999;
+  let tailMinDijkstraScore = undefined;
+  let headMinDijkstraScore = undefined;
+  edges.forEach(({ head, tail, length }) => {
+    const dijkstraScore = lengths[head - 1] + length;
+    if (dijkstraScore < minDijkstraScore) {
+      minDijkstraScore = dijkstraScore;
+      tailMinDijkstraScore = tail;
+      headMinDijkstraScore = head;
+    }
+  });
+  return { minDijkstraScore, tailMinDijkstraScore, headMinDijkstraScore };
+};
