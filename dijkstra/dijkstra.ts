@@ -1,5 +1,29 @@
+import { ifError } from "assert";
 import { EdgeSet, Graph, VortexSet } from "./types";
 import { getCrossingEdges, getMinDijkstraScoreEdge, INFINITY } from "./utils";
+const nReadlines = require("n-readlines");
+
+export const getLengthsThroughDijskstraFromFile = async (filename: string) => {
+  const graph: Graph = {};
+  const broadbandLines = new nReadlines(filename);
+  let line;
+
+  while ((line = broadbandLines.next())) {
+    const numbersRow = line.toString("ascii").split(" ");
+    const [vortex, ...arcsFile] = numbersRow;
+    if (!graph[vortex]) {
+      graph[vortex] = [];
+    }
+    arcsFile.forEach((arcFile: any) => {
+      const headLength = arcFile.split(",").map(Number);
+      graph[vortex].push({ head: headLength[0], length: headLength[1] });
+      if (!graph[headLength[0]]) {
+        graph[headLength[0]] = [];
+      }
+    });
+  }
+  return graph;
+};
 
 export const getLenghtsThroughDijkstra = (
   graph: Graph,
