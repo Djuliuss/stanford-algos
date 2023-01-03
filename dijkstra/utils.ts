@@ -2,6 +2,8 @@ import { graph } from "../course1/testData";
 import { EdgeSet, EdgeVortex, Graph, VortexSet } from "./types";
 const nReadlines = require("n-readlines");
 
+export const INFINITY = 999999999;
+
 export const getGraphFromFile = (filename: string) => {
   const graph: Graph = {};
   const broadbandLines = new nReadlines(filename);
@@ -49,11 +51,11 @@ export const getCrossingEdges = (
 };
 
 export const getMinDijkstraScoreEdge = (edges: EdgeSet, lengths: number[]) => {
-  let minDijkstraScore = 999999999999999999;
+  let minDijkstraScore = INFINITY;
   let tailMinDijkstraScore = undefined;
   let headMinDijkstraScore = undefined;
   edges.forEach(({ head, tail, length }) => {
-    const dijkstraScore = lengths[head - 1] + length;
+    const dijkstraScore = lengths[tail - 1] + length;
     if (dijkstraScore < minDijkstraScore) {
       minDijkstraScore = dijkstraScore;
       tailMinDijkstraScore = tail;

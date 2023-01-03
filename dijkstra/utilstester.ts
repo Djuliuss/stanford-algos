@@ -1,6 +1,6 @@
 import exp from "constants";
 import { EdgeSet, Graph, VortexSet } from "./types";
-import { getCrossingEdges } from "./utils";
+import { getCrossingEdges, getMinDijkstraScoreEdge, INFINITY } from "./utils";
 
 const testGraph: Graph = {
   1: [
@@ -15,24 +15,34 @@ const testGraph: Graph = {
   4: [],
 };
 
-const testVortexSet: VortexSet = [{ vortexId: 1 }];
+const test1VortexSet: VortexSet = [{ vortexId: 1 }];
 
-const testVortexRminusX: VortexSet = [
+const test1VortexRminusX: VortexSet = [
   { vortexId: 2 },
   { vortexId: 3 },
   { vortexId: 4 },
 ];
 
+const expectedResultTest1: EdgeSet = [
+  { tail: 1, head: 2, length: 1 },
+  { tail: 1, head: 3, length: 4 },
+];
+
+const test2Edges = expectedResultTest1;
+const lenghtsTest2 = [0, INFINITY, INFINITY];
+const exptectedResultTest2 = {
+  minDijkstraScore: 1,
+  tailMinDijkstraScore: 1,
+  headMinDijkstraScore: 2,
+};
+
 const tester = () => {
   const responseTest1 = getCrossingEdges(
     testGraph,
-    testVortexSet,
-    testVortexRminusX
+    test1VortexSet,
+    test1VortexRminusX
   );
-  const expectedResultTest1: EdgeSet = [
-    { tail: 1, head: 2, length: 1 },
-    { tail: 1, head: 3, length: 4 },
-  ];
+
   responseTest1.forEach((edge, index) => {
     const {
       head: responseHead,
@@ -61,6 +71,34 @@ const tester = () => {
     }
   });
   console.info(`test 1 succesful`);
+
+  const responseTest2 = getMinDijkstraScoreEdge(test2Edges, lenghtsTest2);
+  if (
+    responseTest2.minDijkstraScore !== exptectedResultTest2.minDijkstraScore
+  ) {
+    throw new Error(
+      `test 2 failed. minDijkstraScore obtained ${responseTest2.minDijkstraScore} expected ${exptectedResultTest2.minDijkstraScore}`
+    );
+  }
+  if (
+    responseTest2.tailMinDijkstraScore !==
+    exptectedResultTest2.tailMinDijkstraScore
+  ) {
+    throw new Error(
+      `test 2 failed. tailMinDijkstraScore obtained ${responseTest2.tailMinDijkstraScore} expected ${exptectedResultTest2.tailMinDijkstraScore}`
+    );
+  }
+
+  if (
+    responseTest2.headMinDijkstraScore !==
+    exptectedResultTest2.headMinDijkstraScore
+  ) {
+    throw new Error(
+      `test 2 failed. headMinDijkstraScore obtained ${responseTest2.headMinDijkstraScore} expected ${exptectedResultTest2.headMinDijkstraScore}`
+    );
+  }
+
+  console.info(`test 2 succesful`);
 };
 
 tester();
