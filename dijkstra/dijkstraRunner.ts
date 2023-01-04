@@ -5,8 +5,8 @@ import { getLengthsThroughDijskstraFromFile } from "./dijkstra";
 const nReadlines = require("n-readlines");
 
 const testFileNames = [
-  "exampleClass",
-  // "1_4",
+  // "exampleClass",
+  "1_4",
   // "2_4",
   // "3_4",
   // "4_4",

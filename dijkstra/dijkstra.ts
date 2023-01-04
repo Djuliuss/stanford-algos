@@ -8,7 +8,7 @@ export const getLengthsThroughDijskstraFromFile = async (filename: string) => {
   let line;
 
   while ((line = broadbandLines.next())) {
-    const numbersRow = line.toString("ascii").split(" ");
+    const numbersRow = line.toString("ascii").split("\t");
     const [vortex, ...arcsFile] = numbersRow;
     if (!graph[vortex]) {
       graph[vortex] = [];
