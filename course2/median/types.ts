@@ -36,16 +36,11 @@ export class Heap {
   public extractMin() {
     const extractedMin = this.nodes[0];
     this.swapNodes(0, this.nodes.length - 1);
+    this.nodes.pop();
     let nodeIndexToBubbleDown = 0;
     let nodeValueToBubbleDown = this.getIndexValue(nodeIndexToBubbleDown);
-    let { leftChildIndex, rightChildIndex } = this.getChildrenIndexes(
-      nodeIndexToBubbleDown
-    );
-    let [leftChildValue, rightChildValue] = [
-      leftChildIndex ? this.getIndexValue(leftChildIndex) : INFINITY,
-      rightChildIndex ? this.getIndexValue(rightChildIndex) : INFINITY,
-    ];
-    this.nodes.pop();
+    let { rightChildIndex, rightChildValue, leftChildIndex, leftChildValue } =
+      this.getChildrenIndexAndValues(nodeIndexToBubbleDown);
     let stop = false;
     while (!stop) {
       const { smallerChildIndex, smallerChildValue } =
@@ -60,17 +55,21 @@ export class Heap {
       } else {
         this.swapNodes(smallerChildIndex!, nodeIndexToBubbleDown);
         nodeIndexToBubbleDown = smallerChildIndex!;
-        nodeValueToBubbleDown = this.getIndexValue(nodeIndexToBubbleDown);
-        ({ leftChildIndex, rightChildIndex } = this.getChildrenIndexes(
-          nodeIndexToBubbleDown
-        ));
-        [leftChildValue, rightChildValue] = [
-          leftChildIndex ? this.getIndexValue(leftChildIndex) : INFINITY,
-          rightChildIndex ? this.getIndexValue(rightChildIndex) : INFINITY,
-        ];
+        ({ rightChildIndex, rightChildValue, leftChildIndex, leftChildValue } =
+          this.getChildrenIndexAndValues(nodeIndexToBubbleDown));
       }
     }
     return extractedMin;
+  }
+
+  private getChildrenIndexAndValues(nodeIndex: number) {
+    let { leftChildIndex, rightChildIndex } =
+      this.getChildrenIndexes(nodeIndex);
+    let [leftChildValue, rightChildValue] = [
+      leftChildIndex ? this.getIndexValue(leftChildIndex) : INFINITY,
+      rightChildIndex ? this.getIndexValue(rightChildIndex) : INFINITY,
+    ];
+    return { leftChildIndex, rightChildIndex, leftChildValue, rightChildValue };
   }
 
   private determineSmallerChild(params: {
