@@ -1,3 +1,5 @@
+const INFINITY = 9999999999;
+
 export class Heap {
   private nodes: number[];
   constructor() {
@@ -5,6 +7,10 @@ export class Heap {
   }
   public getSize() {
     return this.nodes.length;
+  }
+
+  public getMinValue() {
+    return this.getNodeValue(1);
   }
 
   public getNodeValue(node: number) {
@@ -25,6 +31,77 @@ export class Heap {
           ? this.getIndexValue(parentIndex)
           : undefined;
     }
+  }
+
+  public extractMin() {
+    const extractedMin = this.nodes[0];
+    this.swapNodes(0, this.nodes.length - 1);
+    let nodeIndexToBubbleDown = 0;
+    let nodeValueToBubbleDown = this.getIndexValue(nodeIndexToBubbleDown);
+    let { leftChildIndex, rightChildIndex } = this.getChildrenIndexes(
+      nodeIndexToBubbleDown
+    );
+    let [leftChildValue, rightChildValue] = [
+      leftChildIndex ? this.getIndexValue(leftChildIndex) : INFINITY,
+      rightChildIndex ? this.getIndexValue(rightChildIndex) : INFINITY,
+    ];
+    this.nodes.pop();
+    let stop = false;
+    while (!stop) {
+      const { smallerChildIndex, smallerChildValue } =
+        this.determineSmallerChild({
+          rightChildIndex,
+          rightChildValue,
+          leftChildIndex,
+          leftChildValue,
+        });
+      if (nodeValueToBubbleDown <= smallerChildValue) {
+        stop = true;
+      } else {
+        this.swapNodes(smallerChildIndex!, nodeIndexToBubbleDown);
+        nodeIndexToBubbleDown = smallerChildIndex!;
+        nodeValueToBubbleDown = this.getIndexValue(nodeIndexToBubbleDown);
+        ({ leftChildIndex, rightChildIndex } = this.getChildrenIndexes(
+          nodeIndexToBubbleDown
+        ));
+        [leftChildValue, rightChildValue] = [
+          leftChildIndex ? this.getIndexValue(leftChildIndex) : INFINITY,
+          rightChildIndex ? this.getIndexValue(rightChildIndex) : INFINITY,
+        ];
+      }
+    }
+    return extractedMin;
+  }
+
+  private determineSmallerChild(params: {
+    rightChildValue: number;
+    rightChildIndex: number | undefined;
+    leftChildValue: number;
+    leftChildIndex: number | undefined;
+  }) {
+    const { leftChildIndex, leftChildValue, rightChildIndex, rightChildValue } =
+      params;
+    let largerChildValue,
+      largerChildIndex,
+      smallerChildValue,
+      smallerChildIndex;
+    if (leftChildValue <= rightChildValue) {
+      smallerChildIndex = leftChildIndex;
+      smallerChildValue = leftChildValue;
+      largerChildIndex = rightChildIndex;
+      largerChildValue = rightChildValue;
+    } else {
+      smallerChildIndex = rightChildIndex;
+      smallerChildValue = rightChildValue;
+      largerChildIndex = leftChildIndex;
+      largerChildValue = leftChildValue;
+    }
+    return {
+      smallerChildIndex,
+      smallerChildValue,
+      largerChildIndex,
+      largerChildValue,
+    };
   }
 
   private getParentIndex(nodeIndex: number) {
@@ -53,15 +130,15 @@ export class Heap {
   }
 
   private getChildrenIndexes(nodePosition: number) {
-    let leftChild =
+    let leftChildIndex =
       nodePosition * 2 + 1 > this.getSize() - 1
         ? undefined
-        : this.nodes[nodePosition * 2 + 1];
-    let rightChild =
+        : nodePosition * 2 + 1;
+    let rightChildIndex =
       nodePosition * 2 + 2 > this.getSize() - 1
         ? undefined
-        : this.nodes[nodePosition * 2 + 2];
-    return { leftChild, rightChild };
+        : nodePosition * 2 + 2;
+    return { leftChildIndex, rightChildIndex };
   }
 
   private swapNodes(nodeIndex1: number, nodePosition2: number) {

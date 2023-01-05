@@ -64,4 +64,28 @@ for (let i = 1; i <= returnedSize; i++) {
   }
 }
 
-console.info(`tests run succesfully!!!`);
+heap.extractMin();
+expectedSize--;
+returnedSize = heap.getSize();
+
+if (returnedSize !== expectedSize) {
+  throw new Error(
+    `After extracting min I was expecting size ${expectedSize} I got ${returnedSize}`
+  );
+}
+
+const expectedNodeValuesAfterExtractingMin = [
+  4, 4, 4, 9, 7, 5, 9, 11, 13, 8, 10, 12,
+];
+
+for (let i = 1; i <= returnedSize; i++) {
+  const expectedValue = expectedNodeValuesAfterExtractingMin[i - 1];
+  const returnedValue = heap.getNodeValue(i);
+  if (expectedValue !== returnedValue) {
+    throw new Error(
+      `for node ${i} I was expecting ${expectedValue} but I got ${returnedValue} after extracting min`
+    );
+  }
+}
+
+console.info(`tests ran succesfully!!!`);
