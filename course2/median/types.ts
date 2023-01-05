@@ -20,7 +20,10 @@ export class Heap {
       this.swapNodes(parentIndex!, newNodePosition);
       newNodePosition = parentIndex!;
       parentIndex = this.getParentIndex(newNodePosition!);
-      parentIndexValue = parentIndex && this.getIndexValue(parentIndex);
+      parentIndexValue =
+        parentIndex || parentIndex === 0
+          ? this.getIndexValue(parentIndex)
+          : undefined;
     }
   }
 
