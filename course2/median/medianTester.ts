@@ -1,4 +1,3 @@
-import { processKosarajuOnFile } from "../course1/kosaraju";
 import fs from "fs/promises";
 import { identicalArrays } from "../dijkstra/utils";
 import { getLengthsThroughDijskstraFromFile } from "../dijkstra/dijkstra";
@@ -54,8 +53,8 @@ const testFileNames = [
 (async () => {
   let [error, success] = [0, 0];
   for (const testFileName of testFileNames) {
-    const inputFile = `./median/testCases/input_random_${testFileName}.txt`;
-    const outputFile = `./median/testCases/output_random_${testFileName}.txt`;
+    const inputFile = `./course2/median/testCases/input_random_${testFileName}.txt`;
+    const outputFile = `./course2/median/testCases/output_random_${testFileName}.txt`;
     // JD!!!
     // uncomment when ready
     // const response = await getLengthsThroughDijskstraFromFile(inputFile);

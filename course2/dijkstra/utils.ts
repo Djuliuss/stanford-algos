@@ -1,4 +1,3 @@
-import { graph } from "../course1/testData";
 import { EdgeSet, EdgeVortex, Graph, VortexSet } from "./types";
 const nReadlines = require("n-readlines");
 

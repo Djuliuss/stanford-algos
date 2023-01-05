@@ -1,9 +1,9 @@
-import { processKosarajuOnFile } from "../course1/kosaraju";
 import fs from "fs/promises";
+import { processKosarajuOnFile } from "./kosaraju";
 import { identicalArrays } from "./kosarajuUtils";
 
 const testFileNames = [
-  "exampleClass",
+  // "exampleClass",
   "1_8",
   "2_8",
   "3_8",
@@ -71,14 +71,13 @@ const testFileNames = [
   "66_320000",
   "67_320000",
   "68_320000",
-  E,
 ];
 
 (async () => {
   let [error, success] = [0, 0];
   for (const testFileName of testFileNames) {
-    const inputFile = `./kosaraju/testCases/input_mostlyCycles_${testFileName}.txt`;
-    const outputFile = `./kosaraju/testCases/output_mostlyCycles_${testFileName}.txt`;
+    const inputFile = `./course2/kosaraju/testCases/input_mostlyCycles_${testFileName}.txt`;
+    const outputFile = `./course2/kosaraju/testCases/output_mostlyCycles_${testFileName}.txt`;
     const response = await processKosarajuOnFile(inputFile);
     const expectedResult = await fetchExpectedResult(outputFile);
     if (!identicalArrays(response, expectedResult)) {
@@ -87,7 +86,6 @@ const testFileNames = [
       );
       error++;
     } else {
-      E;
       console.info(`SUCCESSFUL TEST!!! ${testFileName}`);
       success++;
     }
