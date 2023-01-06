@@ -21,7 +21,10 @@ export class Heap {
     this.nodes.push(value);
     let newNodePosition: number = this.getSize() - 1;
     let parentIndex = this.getParentIndex(newNodePosition!);
-    let parentIndexValue = parentIndex && this.getIndexValue(parentIndex);
+    let parentIndexValue =
+      parentIndex || parentIndex === 0
+        ? this.getIndexValue(parentIndex)
+        : undefined;
     while (parentIndexValue && parentIndexValue > value) {
       this.swapNodes(parentIndex!, newNodePosition);
       newNodePosition = parentIndex!;
@@ -149,8 +152,7 @@ export class Heap {
     this.nodes[nodeIndex1] = aux;
   }
 }
-
-class MedianCalculator {
+export class MedianCalculator {
   private heapL: Heap;
   private heapH: Heap;
   private medians: number[];
@@ -162,22 +164,26 @@ class MedianCalculator {
   }
 
   public addNumber(number: number) {
-    this.heapL.insertNode(number);
+    const numberNum = Number(number);
+    numberNum > -1 * (this.heapL.getMinValue() ?? 0)
+      ? this.heapH.insertNode(numberNum)
+      : this.heapL.insertNode(numberNum * -1);
+
     this.adjustHeapSizes();
     let newMedian: number;
-    if (this.medians.length * 2 === 0) {
+    if (this.medians.length % 2 === 0) {
       newMedian =
         this.heapL.getSize() > this.heapH.getSize()
-          ? this.heapL.getMinValue()
-          : -1 * this.heapH.getMinValue();
+          ? -1 * this.heapL.getMinValue()
+          : this.heapH.getMinValue();
     } else {
-      newMedian = -1 * this.heapH.getMinValue();
+      newMedian = -1 * this.heapL.getMinValue();
     }
     this.medians.push(newMedian);
   }
 
-  public getMedian(number: number) {
-    return this.medians[number - 1];
+  public getMedians() {
+    return this.medians;
   }
 
   private adjustHeapSizes() {
