@@ -34,6 +34,9 @@ export class Heap {
   }
 
   public extractMin() {
+    if (this.getSize() === 0) {
+      return undefined;
+    }
     const extractedMin = this.nodes[0];
     this.swapNodes(0, this.nodes.length - 1);
     this.nodes.pop();
@@ -144,5 +147,45 @@ export class Heap {
     const aux = this.nodes[nodePosition2];
     this.nodes[nodePosition2] = this.nodes[nodeIndex1];
     this.nodes[nodeIndex1] = aux;
+  }
+}
+
+class MedianCalculator {
+  private heapL: Heap;
+  private heapH: Heap;
+  private medians: number[];
+
+  constructor() {
+    this.heapL = new Heap();
+    this.heapH = new Heap();
+    this.medians = [];
+  }
+
+  public addNumber(number: number) {
+    this.heapL.insertNode(number);
+    this.adjustHeapSizes();
+    let newMedian: number;
+    if (this.medians.length * 2 === 0) {
+      newMedian =
+        this.heapL.getSize() > this.heapH.getSize()
+          ? this.heapL.getMinValue()
+          : -1 * this.heapH.getMinValue();
+    } else {
+      newMedian = -1 * this.heapH.getMinValue();
+    }
+    this.medians.push(newMedian);
+  }
+
+  public getMedian(number: number) {
+    return this.medians[number - 1];
+  }
+
+  private adjustHeapSizes() {
+    while (this.heapH.getSize() > this.heapL.getSize() + 1) {
+      this.heapL.insertNode(-1 * this.heapH.extractMin()!);
+    }
+    while (this.heapL.getSize() > this.heapH.getSize() + 1) {
+      this.heapH.insertNode(-1 * this.heapL.extractMin()!);
+    }
   }
 }
