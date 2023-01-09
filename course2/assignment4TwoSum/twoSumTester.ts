@@ -1,4 +1,5 @@
 import fs from "fs/promises";
+import { getTwoSum } from "./twoSum";
 
 const nReadlines = require("n-readlines");
 
@@ -52,12 +53,9 @@ const testFileNames = [
 (async () => {
   let [error, success] = [0, 0];
   for (const testFileName of testFileNames) {
-    const inputFile = `./course2/assignment4TwoSum/testCases/input_random_${testFileName}}.txt`;
+    const inputFile = `./course2/assignment4TwoSum/testCases/input_random_${testFileName}.txt`;
     const outputFile = `./course2/assignment4TwoSum/testCases/output_random_${testFileName}.txt`;
-    // JD!!!
-    // replace with function name
-    // const response = await getSumMedians(inputFile);
-    const response = 2;
+    const response = await getTwoSum(inputFile);
 
     const expectedResult = await fetchExpectedResult(outputFile);
     if (response !== expectedResult) {
