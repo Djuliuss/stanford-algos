@@ -1,5 +1,5 @@
 import fs from "fs/promises";
-import { getTwoSum } from "./twoSum";
+import { getTwoSum2 } from "./twoSum";
 
 const nReadlines = require("n-readlines");
 
@@ -48,6 +48,30 @@ const testFileNames = [
   "42_10000",
   "43_10000",
   "44_10000",
+  "45_20000",
+  "46_20000",
+  // "47_20000",
+  // "48_20000",
+  // "49_40000",
+  // "50_40000",
+  // "51_40000",
+  // "52_40000",
+  // "53_80000",
+  // "54_80000",
+  // "55_80000",
+  // "56_80000",
+  // "57_160000",
+  // "58_160000",
+  // "59_160000",
+  // "60_160000",
+  // "61_430000",
+  // "62_430000",
+  // "63_430000",
+  // "64_430000",
+  // "65_640000",
+  // "66_640000",
+  // "67_640000",
+  // "68_640000",
 ];
 
 (async () => {
@@ -55,7 +79,7 @@ const testFileNames = [
   for (const testFileName of testFileNames) {
     const inputFile = `./course2/assignment4TwoSum/testCases/input_random_${testFileName}.txt`;
     const outputFile = `./course2/assignment4TwoSum/testCases/output_random_${testFileName}.txt`;
-    const response = await getTwoSum(inputFile);
+    const response = await getTwoSum2(inputFile);
 
     const expectedResult = await fetchExpectedResult(outputFile);
     if (response !== expectedResult) {
