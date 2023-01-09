@@ -63,7 +63,7 @@ for (let i = 1; i <= returnedSize; i++) {
     );
   }
 }
-
+KeyboardEvent;
 heap.extractMin();
 expectedSize--;
 returnedSize = heap.getSize();
