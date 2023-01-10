@@ -44,7 +44,8 @@ export const getTwoSum2 = async (filename: string) => {
 
   //   const twoSumCalulator = new TwoSumCalculator(numbers);
   let counter = 0;
-  for (let index = 0; index < numbersSorted.length; index++) {
+  let index = 0;
+  while (numbersSorted[index] <= 5000) {
     const element = numbersSorted[index];
     index % 1000 === 0 && console.info(`index ${index}`);
     counter += findTargetsInInterval(
@@ -54,6 +55,7 @@ export const getTwoSum2 = async (filename: string) => {
       10000,
       index
     );
+    index++;
   }
 
   return counter;
@@ -74,7 +76,6 @@ const findTargetsInInterval = (
   }
   while (numbers[index] <= limitH - x) {
     if (numbers[index] !== x && !sums[numbers[index] + x]) {
-      const sum = numbers[index] + x;
       numberTargets++;
       sums[numbers[index] + x] = true;
     }
