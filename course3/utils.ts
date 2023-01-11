@@ -9,7 +9,7 @@ export const sortByDifference: JobSorter = (a: job, b: job) => {
   if (differenceA === differenceB) {
     return weightAIsLarger ? -1 : 1;
   } else {
-    return weightB - weightA;
+    return differenceB - differenceA;
   }
 };
 
