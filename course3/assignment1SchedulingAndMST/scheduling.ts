@@ -35,14 +35,3 @@ const jobs: job[] = [
   { length: 5, weight: 3 },
   { length: 2, weight: 1 },
 ];
-
-// (async () => {
-//   const response = await getWeightedCompletedTime(jobs, sortByDifference);
-//   console.error(
-//     `JD!!! scheduling.ts 38. The value of response is ${JSON.stringify(
-//       response,
-//       null,
-//       2
-//     )} `
-//   );
-// })();

@@ -1,11 +1,6 @@
-import {
-  getJobsFromFile,
-  getWeightedCompletedTime,
-} from "./assignment1SchedulingAndMST/scheduling";
-import {
-  sortByDifference,
-  sortByRatio,
-} from "./assignment1SchedulingAndMST/utils";
+import { sortAndCountInversions } from "../course1/runner";
+import { getJobsFromFile, getWeightedCompletedTime } from "./scheduling";
+import { sortByDifference, sortByRatio } from "./utils";
 
 const nReadlines = require("n-readlines");
 
