@@ -1,4 +1,5 @@
 import { job, JobSorter } from "./types";
+const nReadlines = require("n-readlines");
 
 export const getWeightedCompletedTime = (jobs: job[], jobSorter: JobSorter) => {
   const sortedJobs = jobs.sort(jobSorter);
@@ -9,4 +10,19 @@ export const getWeightedCompletedTime = (jobs: job[], jobSorter: JobSorter) => {
     weighCompletedTime += lengthAccumulator * weight;
   });
   return weighCompletedTime;
+};
+
+const getJobsFromFile = async (filename: string) => {
+  const numbers: job[] = [];
+  const broadbandLines = new nReadlines(filename);
+  let line;
+  broadbandLines.next();
+  while ((line = broadbandLines.next())) {
+    const numberFromFile = line.toString("ascii");
+    const numberArray = numberFromFile.split(" ");
+    if (numberArray.length === 2) {
+      numbers.push({ weight: numberArray[0], length: numberArray[1] });
+    }
+  }
+  return numbers;
 };
