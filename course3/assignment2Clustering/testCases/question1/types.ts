@@ -20,8 +20,21 @@ class UnionFind {
       node = leader;
       ({ leader } = this.nodes[node]);
     }
-    return this.nodes[node];
+    return leader;
   }
 
-  public union(nodeA: object, nodeB: object) {}
+  public union(objectSetA: number, objectSetB: number) {
+    const { leader: setA, size: sizeA } = this.nodes[this.find(objectSetA)];
+    const { leader: setB, size: sizeB } = this.nodes[this.find(objectSetB)];
+    if (setA === setB) {
+      //continue
+    } else if (sizeA >= sizeB) {
+      this.nodes[setB].leader = setA;
+      this.nodes[setA].size += sizeB;
+    } else {
+      this.nodes[setA].leader = setB;
+      this.nodes[setB].size += sizeA;
+    }
+    return;
+  }
 }
