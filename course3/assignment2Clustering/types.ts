@@ -1,9 +1,15 @@
+export interface edge {
+  node1: number;
+  node2: number;
+  cost: number;
+}
+
 interface objectSet {
   leader: number;
   size: number;
 }
 
-class UnionFind {
+export class UnionFind {
   private nodes: objectSet[] = [];
   constructor(numberNodes: number) {
     for (let index = 0; index < numberNodes; index++) {
@@ -37,4 +43,10 @@ class UnionFind {
     }
     return;
   }
+}
+
+export interface ClusterDistances {
+  [cluster: number]: {
+    [cluster: number]: number;
+  };
 }
