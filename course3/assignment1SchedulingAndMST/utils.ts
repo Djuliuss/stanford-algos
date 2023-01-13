@@ -1,4 +1,4 @@
-import { job, JobSorter } from "./types";
+import { EdgeSet, Graph, job, JobSorter, VortexSet } from "./types";
 
 export const sortByDifference: JobSorter = (a: job, b: job) => {
   const { length: lengthA, weight: weightA } = a;
@@ -19,4 +19,27 @@ export const sortByRatio: JobSorter = (a: job, b: job) => {
   const ratioA = weightA / lengthA;
   const ratioB = weightB / lengthB;
   return ratioB - ratioA;
+};
+
+export const getCrossingEdges = (
+  graph: Graph,
+  setX: VortexSet,
+  setVminusX: VortexSet
+): EdgeSet => {
+  const crossingEdges: EdgeSet = [];
+  const vortexIdsetVminusX = setVminusX.map(({ vortexId }) => vortexId);
+  for (const vortexX of setX) {
+    const { vortexId } = vortexX;
+    const edgesVortexX = graph[vortexId];
+    for (const edgeVorteX of edgesVortexX) {
+      if (vortexIdsetVminusX.includes(edgeVorteX.vortexId)) {
+        crossingEdges.push({
+          u: vortexId,
+          v: edgeVorteX.vortexId,
+          length: edgeVorteX.length,
+        });
+      }
+    }
+  }
+  return crossingEdges;
 };

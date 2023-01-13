@@ -1,6 +1,4 @@
-import { sortAndCountInversions } from "../course1/runner";
-import { getJobsFromFile, getWeightedCompletedTime } from "./scheduling";
-import { sortByDifference, sortByRatio } from "./utils";
+import { getCostUsingPrimFromFile } from "./prim";
 
 const nReadlines = require("n-readlines");
 
@@ -21,64 +19,50 @@ const testFileNames = [
   "14_80",
   "15_80",
   "16_80",
-  "17_160",
-  "18_160",
-  "19_160",
-  "20_160",
-  "21_320",
-  "22_320",
-  "23_320",
-  "24_320",
-  "25_640",
-  "26_640",
-  "27_640",
-  "28_640",
-  "29_1280",
-  "30_1280",
-  "31_1280",
-  "32_1280",
-  "33_2560",
-  "34_2560",
-  "35_2560",
-  "36_2560",
-  "37_5120",
-  "38_5120",
-  "39_5120",
-  "40_5120",
-  "41_10000",
-  "42_10000",
-  "43_10000",
-  "44_10000",
+  "17_100",
+  "18_100",
+  "19_100",
+  "20_100",
+  "21_200",
+  "22_200",
+  "23_200",
+  "24_200",
+  "25_400",
+  "26_400",
+  "27_400",
+  "28_400",
+  "29_800",
+  "30_800",
+  "31_800",
+  "32_800",
+  "33_1000",
+  "34_1000",
+  "35_1000",
+  "36_1000",
+  "37_2000",
+  "38_2000",
+  "39_2000",
+  "40_2000",
+  "41_4000",
+  "42_4000",
+  "43_4000",
+  "44_4000",
 ];
 
 (async () => {
   let [error, success] = [0, 0];
   for (const testFileName of testFileNames) {
-    const inputFile = `./course3/assignment1SchedulingAndMST/testCases/questions1And2/input_random_${testFileName}.txt`;
-    const outputFile = `./course3/assignment1SchedulingAndMST/testCases/questions1And2/output_random_${testFileName}.txt`;
-    const jobs = await getJobsFromFile(inputFile);
-    const response1 = await getWeightedCompletedTime(jobs, sortByDifference);
-    const response2 = await getWeightedCompletedTime(jobs, sortByRatio);
-
-    const [expectedResult1, expectedResult2] = await fetchExpectedResult(
-      outputFile
-    );
-    if (response1 !== expectedResult1) {
+    const inputFile = `./course3/assignment1SchedulingAndMST/testCases/question3/input_random_${testFileName}.txt`;
+    const outputFile = `./course3/assignment1SchedulingAndMST/testCases/question3/output_random_${testFileName}.txt`;
+    const response = await getCostUsingPrimFromFile(inputFile);
+    const expectedResult = await fetchExpectedResult(outputFile);
+    if (response !== expectedResult) {
       console.error(
-        `test ${testFileName} failed response for test1 ${response1} expectedResult ${expectedResult1}`
+        `test ${testFileName} failed response for test1 ${response} expectedResult ${expectedResult}`
       );
       error++;
     } else {
       console.info(`SUCCESSFUL TEST 1!!! ${testFileName}`);
-      success++;
-    }
-    if (response2 !== expectedResult2) {
-      console.error(
-        `test ${testFileName} failed response for test2 ${response2} expectedResult ${expectedResult2}`
-      );
-      error++;
-    } else {
-      console.info(`SUCCESSFUL TEST 2!!! ${testFileName}`);
       success++;
     }
   }
@@ -87,9 +71,6 @@ const testFileNames = [
 
 export async function fetchExpectedResult(filename: string) {
   const broadbandLines = new nReadlines(filename);
-  let line = broadbandLines.next();
-  const response1 = Number(line.toString("ascii"));
-  line = broadbandLines.next();
-  const response2 = Number(line.toString("ascii"));
-  return [response1, response2];
+  const line = broadbandLines.next();
+  return Number(line.toString("ascii"));
 }
