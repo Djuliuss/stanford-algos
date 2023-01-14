@@ -1,4 +1,3 @@
-import cluster from "cluster";
 import { ClusterDistances, edge, UnionFind } from "./types";
 
 const calculateClustersAndGetMaxSpacing = (
@@ -9,6 +8,7 @@ const calculateClustersAndGetMaxSpacing = (
   const edgesSortedByCost = edges.sort(({ cost: costA }, { cost: costB }) => {
     return costA - costB;
   });
+  const edgesSortedByCostCopy = [...edgesSortedByCost];
   const unionFind = new UnionFind(numberNodes);
   let numberClusters = numberNodes;
   while (targetClusters < numberClusters) {
@@ -16,13 +16,15 @@ const calculateClustersAndGetMaxSpacing = (
     unionFind.union(node1, node2);
     numberClusters--;
   }
-  return calculateMaxSpacing(edgesSortedByCost, unionFind);
+  return calculateMaxSpacing(edgesSortedByCostCopy, unionFind);
 };
 
 const calculateMaxSpacing = (edges: edge[], unionFind: UnionFind) => {
   const clusterDistances: ClusterDistances = {};
   edges.forEach((edge) => {
     let { node1, node2, cost } = edge;
+    // JD!!!
+    // ojo
     let cluster1 = unionFind.find(node1);
     let cluster2 = unionFind.find(node2);
     if (cluster1 !== cluster2) {
@@ -33,6 +35,9 @@ const calculateMaxSpacing = (edges: edge[], unionFind: UnionFind) => {
       }
       // JD!!!
       // enough ????
+      if (!clusterDistances[cluster1]) {
+        clusterDistances[cluster1] = {};
+      }
       let minDistance = clusterDistances[cluster1][cluster2] || 999999999;
       minDistance = cost < minDistance ? cost : minDistance;
       clusterDistances[cluster1][cluster2] = minDistance;
@@ -52,3 +57,30 @@ const getMaxSpacing = (clusterDistances: ClusterDistances) => {
   }
   return maxSpacing;
 };
+
+const testData: edge[] = [
+  { node1: 1, node2: 2, cost: 1 },
+  { node1: 1, node2: 3, cost: 2 },
+  { node1: 1, node2: 4, cost: 4 },
+  { node1: 1, node2: 5, cost: 5 },
+  { node1: 2, node2: 3, cost: 4 },
+  { node1: 2, node2: 4, cost: 3 },
+  { node1: 2, node2: 5, cost: 6 },
+  { node1: 3, node2: 4, cost: 1 },
+  { node1: 3, node2: 5, cost: 7 },
+  { node1: 4, node2: 5, cost: 8 },
+];
+
+// const responses = [2, 3, 4].map((e) =>
+const responses = [4].map((e) =>
+  calculateClustersAndGetMaxSpacing(testData, 5, e)
+);
+const expectedResponses = [5, 2, 1];
+
+responses.forEach((_, index) => {
+  if (responses[index] !== expectedResponses[index]) {
+    throw new Error(
+      `Test ${index} failed.  Expected ${expectedResponses[index]} Got ${responses[index]}`
+    );
+  }
+});

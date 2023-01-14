@@ -10,38 +10,41 @@ interface objectSet {
 }
 
 export class UnionFind {
-  private nodes: objectSet[] = [];
+  private objects: objectSet[] = [];
   constructor(numberNodes: number) {
     for (let index = 0; index < numberNodes; index++) {
-      this.nodes.push({ leader: index, size: 1 });
-      index++;
+      this.objects.push({ leader: index, size: 1 });
     }
   }
 
   // each set is determined by its leader.
 
-  public find(node: number) {
-    let { leader } = this.nodes[node];
-    while (leader !== node) {
-      node = leader;
-      ({ leader } = this.nodes[node]);
-    }
-    return leader;
+  public find(object: number) {
+    return this.findByIndex(object - 1);
   }
 
   public union(objectSetA: number, objectSetB: number) {
-    const { leader: setA, size: sizeA } = this.nodes[this.find(objectSetA)];
-    const { leader: setB, size: sizeB } = this.nodes[this.find(objectSetB)];
+    const { leader: setA, size: sizeA } = this.objects[this.find(objectSetA)];
+    const { leader: setB, size: sizeB } = this.objects[this.find(objectSetB)];
     if (setA === setB) {
       //continue
     } else if (sizeA >= sizeB) {
-      this.nodes[setB].leader = setA;
-      this.nodes[setA].size += sizeB;
+      this.objects[setB].leader = setA;
+      this.objects[setA].size += sizeB;
     } else {
-      this.nodes[setA].leader = setB;
-      this.nodes[setB].size += sizeA;
+      this.objects[setA].leader = setB;
+      this.objects[setB].size += sizeA;
     }
     return;
+  }
+
+  private findByIndex(index: number) {
+    let { leader } = this.objects[index];
+    while (leader !== index) {
+      index = leader;
+      ({ leader } = this.objects[index]);
+    }
+    return leader;
   }
 }
 
