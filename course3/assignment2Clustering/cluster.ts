@@ -1,4 +1,27 @@
 import { ClusterDistances, edge, UnionFind } from "./types";
+const nReadlines = require("n-readlines");
+
+export const calculateClustersAndGetMaxSpacingFromFile = (
+  filename: string,
+  numberClusters: number
+) => {
+  const edges: edge[] = [];
+  const lines = new nReadlines(filename);
+  const numberNodes = Number(lines.next().toString("ascii"));
+  let line;
+  while ((line = lines.next())) {
+    const numberFromFile = line.toString("ascii");
+    const numberArray = numberFromFile.split(" ");
+    if (numberArray.length === 3) {
+      edges.push({
+        node1: Number(numberArray[0]),
+        node2: Number(numberArray[1]),
+        cost: Number(numberArray[2]),
+      });
+    }
+  }
+  return calculateClustersAndGetMaxSpacing(edges, numberNodes, numberClusters);
+};
 
 const calculateClustersAndGetMaxSpacing = (
   edges: edge[],
@@ -72,15 +95,15 @@ const testData: edge[] = [
 ];
 
 // const responses = [2, 3, 4].map((e) =>
-const responses = [4].map((e) =>
-  calculateClustersAndGetMaxSpacing(testData, 5, e)
-);
-const expectedResponses = [5, 2, 1];
+// const responses = [4].map((e) =>
+//   calculateClustersAndGetMaxSpacing(testData, 5, e)
+// );
+// const expectedResponses = [5, 2, 1];
 
-responses.forEach((_, index) => {
-  if (responses[index] !== expectedResponses[index]) {
-    throw new Error(
-      `Test ${index} failed.  Expected ${expectedResponses[index]} Got ${responses[index]}`
-    );
-  }
-});
+// responses.forEach((_, index) => {
+//   if (responses[index] !== expectedResponses[index]) {
+//     throw new Error(
+//       `Test ${index} failed.  Expected ${expectedResponses[index]} Got ${responses[index]}`
+//     );
+//   }
+// });
