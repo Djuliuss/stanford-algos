@@ -1,4 +1,5 @@
-import { ClusterDistances, edge, UnionFind } from "./types";
+import { edge, UnionFindArray, UnionFindObject } from "./types";
+import { calculateMaxSpacing } from "./utils";
 const nReadlines = require("n-readlines");
 
 export const calculateClustersAndGetMaxSpacingFromFile = (
@@ -34,7 +35,7 @@ const calculateClustersAndGetMaxSpacing = (
       return costA - costB;
     }
   );
-  const unionFind = new UnionFind(numberNodes);
+  const unionFind = new UnionFindArray(numberNodes);
   let numberClusters = unionFind.getNumberClusters();
   while (targetClusters < numberClusters) {
     const { node1, node2 } = edgesSortedByCost.shift()!;
@@ -43,44 +44,3 @@ const calculateClustersAndGetMaxSpacing = (
   }
   return calculateMaxSpacing(edgesCopy, unionFind);
 };
-
-const calculateMaxSpacing = (edges: edge[], unionFind: UnionFind) => {
-  let min = 9999999;
-  edges.forEach((edge) => {
-    let { node1, node2, cost } = edge;
-    let cluster1 = unionFind.find(node1);
-    let cluster2 = unionFind.find(node2);
-    if (cluster1 !== cluster2) {
-      min = cost < min ? cost : min;
-    }
-  });
-  return min;
-};
-
-const testData: edge[] = [
-  { node1: 1, node2: 2, cost: 1 },
-  { node1: 1, node2: 3, cost: 2 },
-  { node1: 1, node2: 4, cost: 4 },
-  { node1: 1, node2: 5, cost: 5 },
-  { node1: 2, node2: 3, cost: 4 },
-  { node1: 2, node2: 4, cost: 3 },
-  { node1: 2, node2: 5, cost: 6 },
-  { node1: 3, node2: 4, cost: 1 },
-  { node1: 3, node2: 5, cost: 7 },
-  { node1: 4, node2: 5, cost: 8 },
-];
-
-// const responses = [2, 3, 4].map((e) =>
-// const responses = [2, 3, 4].map((e) =>
-//   calculateClustersAndGetMaxSpacing(testData, 5, e)
-// );
-// // const expectedResponses = [5, 2, 1];
-// const expectedResponses = [5, 2, 1];
-
-// responses.forEach((_, index) => {
-//   if (responses[index] !== expectedResponses[index]) {
-//     throw new Error(
-//       `Test ${index} failed.  Expected ${expectedResponses[index]} Got ${responses[index]}`
-//     );
-//   }
-// });
