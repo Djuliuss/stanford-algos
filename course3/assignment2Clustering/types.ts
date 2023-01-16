@@ -11,16 +11,22 @@ interface objectSet {
 
 export class UnionFind {
   private objects: objectSet[] = [];
+  private numberClusters = 0;
   constructor(numberNodes: number) {
     for (let index = 0; index < numberNodes; index++) {
       this.objects.push({ leader: index, size: 1 });
     }
+    this.numberClusters = numberNodes;
   }
 
   // each set is determined by its leader.
 
   public find(object: number) {
     return this.findByIndex(object - 1);
+  }
+
+  public getNumberClusters() {
+    return this.numberClusters;
   }
 
   public union(objectSetA: number, objectSetB: number) {
@@ -31,9 +37,11 @@ export class UnionFind {
     } else if (sizeA >= sizeB) {
       this.objects[setB].leader = setA;
       this.objects[setA].size += sizeB;
+      this.numberClusters--;
     } else {
       this.objects[setA].leader = setB;
       this.objects[setB].size += sizeA;
+      this.numberClusters--;
     }
     return;
   }

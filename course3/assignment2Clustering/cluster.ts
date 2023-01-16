@@ -35,11 +35,11 @@ const calculateClustersAndGetMaxSpacing = (
     }
   );
   const unionFind = new UnionFind(numberNodes);
-  let numberClusters = numberNodes;
+  let numberClusters = unionFind.getNumberClusters();
   while (targetClusters < numberClusters) {
     const { node1, node2 } = edgesSortedByCost.shift()!;
     unionFind.union(node1, node2);
-    numberClusters--;
+    numberClusters = unionFind.getNumberClusters();
   }
   return calculateMaxSpacing(edgesCopy, unionFind);
 };
