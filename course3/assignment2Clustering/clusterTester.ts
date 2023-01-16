@@ -1,9 +1,11 @@
 import { calculateClustersAndGetMaxSpacingFromFile } from "./cluster";
 
 const nReadlines = require("n-readlines");
-
+// JD!!!
+// try example by RobinPercy here https://www.coursera.org/learn/algorithms-greedy/discussions/weeks/2/threads/yqY_qtLCEeaBeg5U4yHl7A
 const testFileNames = [
-  "1_8",
+  "0_1",
+  // "1_8",
   // "2_8",
   // "3_8",
   // "4_8",
@@ -42,7 +44,7 @@ const testFileNames = [
   for (const testFileName of testFileNames) {
     const inputFile = `./course3/assignment2Clustering/testCases/question1/input_completeRandom_${testFileName}.txt`;
     const outputFile = `./course3/assignment2Clustering/testCases/question1/output_completeRandom_${testFileName}.txt`;
-    const numberofClusters = 4;
+    const numberofClusters = 2;
     const response = await calculateClustersAndGetMaxSpacingFromFile(
       inputFile,
       4

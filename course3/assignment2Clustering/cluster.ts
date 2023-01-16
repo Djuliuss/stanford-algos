@@ -28,10 +28,12 @@ const calculateClustersAndGetMaxSpacing = (
   numberNodes: number,
   targetClusters: number
 ) => {
-  const edgesSortedByCost = edges.sort(({ cost: costA }, { cost: costB }) => {
-    return costA - costB;
-  });
-  const edgesSortedByCostCopy = [...edgesSortedByCost];
+  const edgesCopy = [...edges];
+  const edgesSortedByCost = edgesCopy.sort(
+    ({ cost: costA }, { cost: costB }) => {
+      return costA - costB;
+    }
+  );
   const unionFind = new UnionFind(numberNodes);
   let numberClusters = numberNodes;
   while (targetClusters < numberClusters) {
@@ -39,34 +41,42 @@ const calculateClustersAndGetMaxSpacing = (
     unionFind.union(node1, node2);
     numberClusters--;
   }
-  return calculateMaxSpacing(edgesSortedByCostCopy, unionFind);
+  return calculateMaxSpacing(edgesCopy, unionFind);
 };
 
 const calculateMaxSpacing = (edges: edge[], unionFind: UnionFind) => {
-  const clusterDistances: ClusterDistances = {};
+  // const clusterDistances: ClusterDistances = {};
+  let min = 9999999;
   edges.forEach((edge) => {
+    //   let { node1, node2, cost } = edge;
+    //   // JD!!!
+    //   // ojo
+    //   let cluster1 = unionFind.find(node1);
+    //   let cluster2 = unionFind.find(node2);
+    //   if (cluster1 !== cluster2) {
+    //     // JD!!!
+    //     // probably can be removed
+    //     if (cluster1 > cluster2) {
+    //       [cluster1, cluster2] = [cluster2, cluster1];
+    //     }
+    //     // JD!!!
+    //     // enough ????
+    //     if (!clusterDistances[cluster1]) {
+    //       clusterDistances[cluster1] = {};
+    //     }
+    //     let minDistance = clusterDistances[cluster1][cluster2] || 999999999;
+    //     minDistance = cost < minDistance ? cost : minDistance;
+    //     clusterDistances[cluster1][cluster2] = minDistance;
+    //   }
     let { node1, node2, cost } = edge;
-    // JD!!!
-    // ojo
     let cluster1 = unionFind.find(node1);
     let cluster2 = unionFind.find(node2);
     if (cluster1 !== cluster2) {
-      // JD!!!
-      // probably can be removed
-      if (cluster1 > cluster2) {
-        [cluster1, cluster2] = [cluster2, cluster1];
-      }
-      // JD!!!
-      // enough ????
-      if (!clusterDistances[cluster1]) {
-        clusterDistances[cluster1] = {};
-      }
-      let minDistance = clusterDistances[cluster1][cluster2] || 999999999;
-      minDistance = cost < minDistance ? cost : minDistance;
-      clusterDistances[cluster1][cluster2] = minDistance;
+      min = cost < min ? cost : min;
     }
   });
-  return getMaxSpacing(clusterDistances);
+  return min;
+  // return getMaxSpacing(clusterDistances);
 };
 
 const getMaxSpacing = (clusterDistances: ClusterDistances) => {
@@ -95,9 +105,10 @@ const testData: edge[] = [
 ];
 
 // const responses = [2, 3, 4].map((e) =>
-// const responses = [4].map((e) =>
+// const responses = [2, 3, 4].map((e) =>
 //   calculateClustersAndGetMaxSpacing(testData, 5, e)
 // );
+// // const expectedResponses = [5, 2, 1];
 // const expectedResponses = [5, 2, 1];
 
 // responses.forEach((_, index) => {
