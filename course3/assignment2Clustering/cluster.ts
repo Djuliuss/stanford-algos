@@ -1,5 +1,9 @@
 import { edge, UnionFindArray, UnionFindObject } from "./types";
-import { calculateMaxSpacing } from "./utils";
+import {
+  addNodesToMap,
+  calculateEdgesForAllNodes,
+  calculateMaxSpacing,
+} from "./utils";
 const nReadlines = require("n-readlines");
 
 export const calculateClustersAndGetMaxSpacingFromFile = (
@@ -44,3 +48,34 @@ const calculateClustersAndGetMaxSpacing = (
   }
   return calculateMaxSpacing(edgesCopy, unionFind);
 };
+
+export const calculateLargestClusterForDistanceBelowThreeFromFile = (
+  filename: string
+) => {
+  const nodes: string[] = [];
+  const lines = new nReadlines(filename);
+  const [numberNodes, numberBits] = lines
+    .next()
+    .toString("ascii")
+    .split(" ")
+    .map(Number);
+  let line;
+  while ((line = lines.next())) {
+    nodes.push(line.toString("ascii").split(" ").join(""));
+  }
+  return calculateLargestClusterForDistanceBelowThree(nodes, numberBits);
+};
+
+const calculateLargestClusterForDistanceBelowThree = (
+  nodes: string[],
+  length: number
+) => {
+  addNodesToMap(nodes);
+  const edges = calculateEdgesForAllNodes(nodes, length);
+
+  return "foo";
+};
+
+calculateLargestClusterForDistanceBelowThreeFromFile(
+  "/Users/julio/algorithms/course3/assignment2Clustering/testCases/question2/input_random_2_4_10.txt"
+);
