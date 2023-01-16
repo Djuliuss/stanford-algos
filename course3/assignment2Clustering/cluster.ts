@@ -45,29 +45,8 @@ const calculateClustersAndGetMaxSpacing = (
 };
 
 const calculateMaxSpacing = (edges: edge[], unionFind: UnionFind) => {
-  // const clusterDistances: ClusterDistances = {};
   let min = 9999999;
   edges.forEach((edge) => {
-    //   let { node1, node2, cost } = edge;
-    //   // JD!!!
-    //   // ojo
-    //   let cluster1 = unionFind.find(node1);
-    //   let cluster2 = unionFind.find(node2);
-    //   if (cluster1 !== cluster2) {
-    //     // JD!!!
-    //     // probably can be removed
-    //     if (cluster1 > cluster2) {
-    //       [cluster1, cluster2] = [cluster2, cluster1];
-    //     }
-    //     // JD!!!
-    //     // enough ????
-    //     if (!clusterDistances[cluster1]) {
-    //       clusterDistances[cluster1] = {};
-    //     }
-    //     let minDistance = clusterDistances[cluster1][cluster2] || 999999999;
-    //     minDistance = cost < minDistance ? cost : minDistance;
-    //     clusterDistances[cluster1][cluster2] = minDistance;
-    //   }
     let { node1, node2, cost } = edge;
     let cluster1 = unionFind.find(node1);
     let cluster2 = unionFind.find(node2);
@@ -76,19 +55,6 @@ const calculateMaxSpacing = (edges: edge[], unionFind: UnionFind) => {
     }
   });
   return min;
-  // return getMaxSpacing(clusterDistances);
-};
-
-const getMaxSpacing = (clusterDistances: ClusterDistances) => {
-  let maxSpacing = 0;
-  const clusterAs = Object.keys(clusterDistances).map(Number);
-  for (const clusterA of clusterAs) {
-    const clusterBs = Object.keys(clusterDistances[clusterA]).map(Number);
-    for (const clusterB of clusterBs) {
-      maxSpacing += clusterDistances[clusterA][clusterB];
-    }
-  }
-  return maxSpacing;
 };
 
 const testData: edge[] = [
