@@ -40,6 +40,7 @@ const testFileNames = [
 ];
 
 (async () => {
+  console.time("test");
   let [error, success] = [0, 0];
   for (const testFileName of testFileNames) {
     const inputFile = `./course3/assignment2Clustering/testCases/question1/input_completeRandom_${testFileName}.txt`;
@@ -61,6 +62,7 @@ const testFileNames = [
     }
   }
   console.info(`RESULTS OF TESTS SUCCESS: ${success} ERRORS: ${error}`);
+  console.timeEnd("test");
 })();
 
 export async function fetchExpectedResult(filename: string) {

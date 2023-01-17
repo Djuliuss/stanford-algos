@@ -46,7 +46,7 @@ const calculateClustersAndGetMaxSpacing = (
     unionFind.union(node1, node2);
     numberClusters = unionFind.getNumberClusters();
   }
-  return calculateMaxSpacing(edgesCopy, unionFind);
+  return calculateMaxSpacing(edgesSortedByCost, unionFind);
 };
 
 export const calculateLargestClusterForDistanceBelowThreeFromFile = (
@@ -101,16 +101,3 @@ const getNumberNodesFromEdges = (edges: edge[]) => {
   });
   return numberNodes;
 };
-
-(async () => {
-  const response = await calculateLargestClusterForDistanceBelowThreeFromFile(
-    "/Users/julio/algorithms/course3/assignment2Clustering/clusterQuestion2.txt"
-  );
-  console.error(
-    `JD!!! cluster.ts 109. The value of response is ${JSON.stringify(
-      response,
-      null,
-      2
-    )} `
-  );
-})();

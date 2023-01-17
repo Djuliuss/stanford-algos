@@ -1,24 +1,20 @@
-import {
-  getStatesWithOneOne,
-  getStatesWithTwoOnes,
-  calculatePoint,
-} from "./binary";
+import { calculatePoint, getStatesByNOnes } from "./binary";
 import { edge, UnionFindArray } from "./types";
 
+// expects the an array with the edges that have not been added
 export const calculateMaxSpacing = (
   edges: edge[],
   unionFind: UnionFindArray
 ) => {
-  let min = 9999999;
-  edges.forEach((edge) => {
-    let { node1, node2, cost } = edge;
-    let cluster1 = unionFind.find(node1);
-    let cluster2 = unionFind.find(node2);
-    if (cluster1 !== cluster2) {
-      min = cost < min ? cost : min;
-    }
-  });
-  return min;
+  let i = 0;
+  let { node1, node2, cost } = edges[i];
+  let [cluster1, cluster2] = [unionFind.find(node1), unionFind.find(node2)];
+  while (cluster1 === cluster2) {
+    i++;
+    ({ node1, node2, cost } = edges[i]);
+    [cluster1, cluster2] = [unionFind.find(node1), unionFind.find(node2)];
+  }
+  return cost;
 };
 
 let nodeMap: Map<string, number[]> = new Map();
@@ -33,19 +29,6 @@ export const addNodesToMap = (nodes: string[]) => {
       nodeMap.has(el) ? [...nodeMap.get(el)!, index + 1] : [index + 1]
     )
   );
-  // nodes.forEach((el) => {
-  //   if (!nodeMap.has(el)) {
-  //     console.error(`${el} is missing`);
-  //   }
-  // });
-
-  // console.info(`nodes length ${nodes.length}`);
-  // console.info(`map length ${nodeMap.size}`);
-  // console.info(`1:`);
-  // console.info(JSON.stringify(nodes.sort()));
-  // console.info(`2:`);
-  // console.info(JSON.stringify([...nodeMap.keys()].sort()));
-  // continue
 };
 
 export const calculateShortEdgesForAllNodes = (
@@ -67,24 +50,22 @@ export const calculateEdgesForNode = (
   length: number
 ) => {
   const edges: edge[] = [];
-  const operatorsDistanceOne = [...getStatesWithOneOne(length)];
-  const operatorsDistanceTwo = [...getStatesWithTwoOnes(length)];
-  // get duplicates
-  const values = nodeMap.get(node)?.filter((e) => e !== nodeNumber)!;
-  values.forEach((element) => {
-    const concatenation = element + "+" + nodeNumber.toString();
-    if (!flags.has(concatenation)) {
-      edges.push({
-        node1: nodeNumber,
-        node2: element,
-        cost: 0,
-      });
-      flags.set(nodeNumber.toString() + "+" + element, true);
-    }
+  [0, 1, 2].forEach((e) => {
+    const operators = [...getStatesByNOnes(length, e as 0 | 1 | 2)!];
+    edges.push(...processOperators(operators, node, nodeNumber, length, e));
   });
+  return edges;
+};
 
-  //
-  operatorsDistanceOne.forEach((e) => {
+const processOperators = (
+  operators: string[],
+  node: string,
+  nodeNumber: number,
+  length: number,
+  distance: number
+) => {
+  const edges: edge[] = [];
+  operators.forEach((e) => {
     const candidate = calculatePoint(node, e, length);
     if (nodeMap.has(candidate)) {
       const values = nodeMap.get(candidate)?.filter((e) => e !== nodeNumber)!;
@@ -94,24 +75,7 @@ export const calculateEdgesForNode = (
           edges.push({
             node1: nodeNumber,
             node2: element,
-            cost: 1,
-          });
-          flags.set(nodeNumber.toString() + "+" + element, true);
-        }
-      });
-    }
-  });
-  operatorsDistanceTwo.forEach((e) => {
-    const candidate = calculatePoint(node, e, length);
-    if (nodeMap.has(candidate)) {
-      const values = nodeMap.get(candidate)?.filter((e) => e !== nodeNumber)!;
-      values.forEach((element) => {
-        const concatenation = element + "+" + nodeNumber.toString();
-        if (!flags.has(concatenation)) {
-          edges.push({
-            node1: nodeNumber,
-            node2: element,
-            cost: 2,
+            cost: distance,
           });
           flags.set(nodeNumber.toString() + "+" + element, true);
         }

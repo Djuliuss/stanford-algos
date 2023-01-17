@@ -1,25 +1,26 @@
-interface States {
-  [key: number]: string[];
+interface StatesN {
+  0?: string[];
+  1?: string[];
+  2?: string[];
 }
 
-const statesOneOne: States = {};
-const statesTwoOnes: States = {};
+interface StatesByLength {
+  [length: number]: StatesN;
+}
 
-export const getStatesWithOneOne = (length: number) => {
-  if (statesOneOne[length]) {
-    return statesOneOne[length];
-  } else {
-    statesOneOne[length] = generateStates(length, 1);
-    return statesOneOne[length];
-  }
-};
+const statesByLength: StatesByLength = {};
 
-export const getStatesWithTwoOnes = (length: number) => {
-  if (statesTwoOnes[length]) {
-    return statesTwoOnes[length];
+export const getStatesByNOnes = (length: number, n: 0 | 1 | 2) => {
+  if (statesByLength[length]?.[n]) {
+    return statesByLength[length][n];
   } else {
-    statesTwoOnes[length] = generateStates(length, 2);
-    return statesTwoOnes[length];
+    const states = generateStates(length, n);
+    if (!statesByLength[length]) {
+      statesByLength[length] = { [n]: states };
+    } else {
+      statesByLength[length][n] = states;
+    }
+    return statesByLength[length][n];
   }
 };
 
