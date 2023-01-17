@@ -52,5 +52,5 @@ function numberOnes(str: string) {
   return numberOnes;
 }
 
-export const calculatePoint = (a: string, b: string) =>
-  (parseInt(a, 2) ^ parseInt(b, 2)).toString(2);
+export const calculatePoint = (a: string, b: string, length: number) =>
+  (parseInt(a, 2) ^ parseInt(b, 2)).toString(2).padStart(length, "0");

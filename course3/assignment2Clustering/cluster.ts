@@ -1,7 +1,7 @@
 import { edge, UnionFindArray, UnionFindObject } from "./types";
 import {
   addNodesToMap,
-  calculateEdgesForAllNodes,
+  calculateShortEdgesForAllNodes,
   calculateMaxSpacing,
 } from "./utils";
 const nReadlines = require("n-readlines");
@@ -63,7 +63,9 @@ export const calculateLargestClusterForDistanceBelowThreeFromFile = (
   while ((line = lines.next())) {
     nodes.push(line.toString("ascii").split(" ").join(""));
   }
-  return calculateLargestClusterForDistanceBelowThree(nodes, numberBits);
+  const { numberClusters, numberNodesSelected } =
+    calculateLargestClusterForDistanceBelowThree(nodes, numberBits);
+  return numberNodes - numberNodesSelected + numberClusters;
 };
 
 const calculateLargestClusterForDistanceBelowThree = (
@@ -71,11 +73,44 @@ const calculateLargestClusterForDistanceBelowThree = (
   length: number
 ) => {
   addNodesToMap(nodes);
-  const edges = calculateEdgesForAllNodes(nodes, length);
+  const edges = calculateShortEdgesForAllNodes(nodes, length);
+  const numberNodesSelected = getNumberNodesFromEdges(edges);
+  const unionFind = new UnionFindObject(edges);
+  while (edges.length) {
+    const { node1, node2 } = edges.shift()!;
+    unionFind.union(node1, node2);
+  }
+  const numberClusters = unionFind.getNumberClusters();
 
-  return "foo";
+  return { numberClusters, numberNodesSelected };
 };
 
-calculateLargestClusterForDistanceBelowThreeFromFile(
-  "/Users/julio/algorithms/course3/assignment2Clustering/testCases/question2/input_random_2_4_10.txt"
-);
+const getNumberNodesFromEdges = (edges: edge[]) => {
+  let map = new Map();
+  let numberNodes = 0;
+  edges.forEach((edge) => {
+    const { node1, node2 } = edge;
+    if (!map.has(node1)) {
+      map.set(node1, true);
+      numberNodes++;
+    }
+    if (!map.has(node2)) {
+      map.set(node2, true);
+      numberNodes++;
+    }
+  });
+  return numberNodes;
+};
+
+(async () => {
+  const response = await calculateLargestClusterForDistanceBelowThreeFromFile(
+    "/Users/julio/algorithms/course3/assignment2Clustering/clusterQuestion2.txt"
+  );
+  console.error(
+    `JD!!! cluster.ts 109. The value of response is ${JSON.stringify(
+      response,
+      null,
+      2
+    )} `
+  );
+})();
