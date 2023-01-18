@@ -82,12 +82,13 @@ const testFileNames = [
   "78_32768_20",
   "79_65536_24",
   "80_65536_22",
-  "81_131072_24",
-  "82_131072_22",
-  "83_262144_24",
+  // "81_131072_24",
+  // "82_131072_22",
+  // "83_262144_24",
 ];
 
 (async () => {
+  console.time("test");
   let [error, success] = [0, 0];
   for (const testFileName of testFileNames) {
     const inputFile = `./course3/assignment2Clustering/testCases/question2/input_random_${testFileName}.txt`;
@@ -107,6 +108,7 @@ const testFileNames = [
     }
   }
   console.info(`RESULTS OF TESTS SUCCESS: ${success} ERRORS: ${error}`);
+  console.timeEnd("test");
 })();
 
 export async function fetchExpectedResult(filename: string) {

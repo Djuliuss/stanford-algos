@@ -24,34 +24,28 @@ export const getStatesByNOnes = (length: number, n: 0 | 1 | 2) => {
   }
 };
 
-function generateStates(n: number, num: number) {
-  var states = [];
-
-  // Convert to decimal
-  var maxDecimal = parseInt("1".repeat(n), 2);
-
-  // For every number between 0->decimal
-  for (var i = 0; i <= maxDecimal; i++) {
-    // Convert to binary, pad with 0, and add to final results
-    const candidate = i.toString(2).padStart(n, "0");
-    if (numberOnes(candidate) === num) {
-      states.push(candidate);
-    }
+const generateStates = (length: number, numberOnes: number) => {
+  if (length === numberOnes) {
+    return ["1".repeat(length)];
+  } else {
+    const childrenStates = generateStates(length - 1, numberOnes);
+    console.info(`doing ${length}`);
+    let response: string[] = [];
+    const map = new Map();
+    childrenStates.forEach((childrenState) => {
+      for (let index = 0; index <= childrenState.length; index++) {
+        const array = childrenState.split("");
+        array.splice(index, 0, "0");
+        const item = array.join("");
+        if (!map.has(item)) {
+          response.push(item);
+          map.set(item, true);
+        }
+      }
+    });
+    return response;
   }
-
-  return states;
-}
-
-function numberOnes(str: string) {
-  let numberOnes = 0;
-  const array = str.split("");
-  array.forEach((e) => {
-    if (e === "1") {
-      numberOnes++;
-    }
-  });
-  return numberOnes;
-}
+};
 
 export const calculatePoint = (a: string, b: string, length: number) =>
   (parseInt(a, 2) ^ parseInt(b, 2)).toString(2).padStart(length, "0");
