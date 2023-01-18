@@ -56,11 +56,16 @@ const testFileNames = [
   for (const testFileName of testFileNames) {
     const inputFile = `./course3/assignment3HuffmanAndMWIS/testCases/question1And2/input_random_${testFileName}.txt`;
     const outputFile = `./course3/assignment3HuffmanAndMWIS/testCases/question1And2/output_random_${testFileName}.txt`;
-    // const response = await calculateClustersAndGetMaxSpacingFromFile(inputFile);
+    const response = { maximumBites: 0, minimumBites: 0 };
     const expectedResult = await fetchExpectedResult(outputFile);
-    if (response !== expectedResult) {
+    if (response.maximumBites !== expectedResult.maximumBites) {
       console.error(
-        `test ${testFileName} failed response for test1 ${response} expectedResult ${expectedResult}`
+        `maximumbites test ${testFileName} failed response for test1  ${response} expectedResult ${expectedResult}`
+      );
+      error++;
+    } else if (response.minimumBites !== expectedResult.minimumBites) {
+      console.error(
+        `minimumbites test ${testFileName} failed response for test1  ${response} expectedResult ${expectedResult}`
       );
       error++;
     } else {
@@ -74,6 +79,9 @@ const testFileNames = [
 
 export async function fetchExpectedResult(filename: string) {
   const broadbandLines = new nReadlines(filename);
-  const line = broadbandLines.next();
-  return Number(line.toString("ascii"));
+  let line = broadbandLines.next();
+  const maximumBites = Number(line.toString("ascii"));
+  line = broadbandLines.next();
+  const minimumBites = Number(line.toString("ascii"));
+  return { maximumBites, minimumBites };
 }
