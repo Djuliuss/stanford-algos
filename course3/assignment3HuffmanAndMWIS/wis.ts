@@ -60,24 +60,53 @@ const calculateWmis2 = (vertices: vortex[]) => {
   return a[a.length - 1];
 };
 
+// JD!!!
+// using weights, not working at the moment
+const calculateWmis3 = (vertices: vortex[]) => {
+  const a: number[] = [];
+  a[0] = 0;
+  a[1] = vertices[0].weight;
+  for (let index = 2; index <= vertices.length; index++) {
+    a[index] = Math.max(
+      a[index - 1],
+      a[index - 2] + vertices[index - 1].weight
+    );
+  }
+  return constructSolutions(a, vertices);
+};
+
+const constructSolutions = (a: number[], vertices: vortex[]) => {
+  const verticesSolution: vortex[] = [];
+  let index = vertices.length - 1;
+  while (index >= 0) {
+    if (a[index - 1] >= a[index - 2] + vertices[index].weight) {
+      index--;
+    } else {
+      verticesSolution.push(vertices[index]);
+      index -= 2;
+    }
+  }
+  return verticesSolution;
+};
+
 const mergeVerticesNumbers = (vertices: vortex[]) =>
   vertices.reduce((acc, { vortexNumber }) => (acc += "/" + vortexNumber), "");
 
 const totalWeight = (vertices: vortex[]) =>
   vertices.reduce((acc, { weight }) => (acc += weight), 0);
 
-// const testData: vortex[] = [
-//   { vortexNumber: "1", weight: 1 },
-//   { vortexNumber: "2", weight: 4 },
-//   { vortexNumber: "3", weight: 5 },
-//   { vortexNumber: "4", weight: 4 },
-// ];
+const testData: vortex[] = [
+  { vortexNumber: "1", weight: 1 },
+  { vortexNumber: "2", weight: 4 },
+  { vortexNumber: "3", weight: 5 },
+  { vortexNumber: "4", weight: 4 },
+];
 
-// const response = calculateWmis2(testData);
-// console.error(
-//   `JD!!! wis.ts 30. The value of response is ${JSON.stringify(
-//     response,
-//     null,
-//     2
-//   )} `
-// );
+const response = calculateWmis3(testData);
+console.error(
+  `JD!!! wis.ts 30. The value of response is ${JSON.stringify(
+    response,
+    null,
+    2
+  )} `
+);
