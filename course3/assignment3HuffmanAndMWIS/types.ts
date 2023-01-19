@@ -194,3 +194,8 @@ export class Heap {
     this.nodes[nodeIndex1] = aux;
   }
 }
+
+export interface vortex {
+  vortexNumber: number;
+  weight: number;
+}
