@@ -196,6 +196,6 @@ export class Heap {
 }
 
 export interface vortex {
-  vortexNumber: number;
+  vortexNumber: string;
   weight: number;
 }
