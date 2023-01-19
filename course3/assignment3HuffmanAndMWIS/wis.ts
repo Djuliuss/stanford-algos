@@ -17,7 +17,7 @@ export const calculateWmisFromFile = async (filename: string) => {
     index++;
   }
   map = new Map();
-  return calculateWmis(vertices);
+  return calculateWmis2(vertices);
 };
 
 const calculateWmis = (vertices: vortex[]): vortex[] => {
@@ -44,6 +44,22 @@ const calculateWmis = (vertices: vortex[]): vortex[] => {
   return totalWeightS1 > totalWeightS2 ? s1 : [...s2, lastVortex];
 };
 
+// JD!!!
+// THIS FUNCTION WORKS MUCH FASTER AND BETTER THAN THE PREVIOUS calculateWmis. Also, no stack size errors
+const calculateWmis2 = (vertices: vortex[]) => {
+  const a: vortex[][] = [];
+  a[0] = [];
+  a[1] = [vertices[0]];
+  for (let index = 2; index <= vertices.length; index++) {
+    a[index] =
+      totalWeight(a[index - 1]) >
+      totalWeight([...a[index - 2], vertices[index - 1]])
+        ? a[index - 1]
+        : [...a[index - 2], vertices[index - 1]];
+  }
+  return a[a.length - 1];
+};
+
 const mergeVerticesNumbers = (vertices: vortex[]) =>
   vertices.reduce((acc, { vortexNumber }) => (acc += "/" + vortexNumber), "");
 
@@ -51,15 +67,13 @@ const totalWeight = (vertices: vortex[]) =>
   vertices.reduce((acc, { weight }) => (acc += weight), 0);
 
 // const testData: vortex[] = [
-//   { vortexNumber: 1, weight: 1 },
-//   { vortexNumber: 2, weight: 4 },
-//   { vortexNumber: 3, weight: 5 },
-//   { vortexNumber: 4, weight: 4 },
-// // ];
+//   { vortexNumber: "1", weight: 1 },
+//   { vortexNumber: "2", weight: 4 },
+//   { vortexNumber: "3", weight: 5 },
+//   { vortexNumber: "4", weight: 4 },
+// ];
 
-// const response = calculateWmisFromFile(
-//   "/Users/julio/algorithms/course3/assignment3HuffmanAndMWIS/testCases/question3/input_random_1_10.txt"
-// );
+// const response = calculateWmis2(testData);
 // console.error(
 //   `JD!!! wis.ts 30. The value of response is ${JSON.stringify(
 //     response,
