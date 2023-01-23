@@ -17,13 +17,16 @@ export const calculateWmisFromFile = async (filename: string) => {
     index++;
   }
   map = new Map();
-  return calculateWmis2(vertices);
+  console.error("JD!!! I AM HERE at wis.ts 20");
+
+  return calculateWmis(vertices);
 };
 
 const calculateWmis = (vertices: vortex[]): vortex[] => {
   if ([0, 1].includes(vertices.length)) {
     return vertices;
   }
+  console.info(`length ${vertices.length}`);
   const lastVortex = vertices[vertices.length - 1];
   const g1 = vertices.slice(0, -1);
   const g2 = vertices.slice(0, -2);
@@ -102,11 +105,11 @@ const testData: vortex[] = [
   { vortexNumber: "4", weight: 4 },
 ];
 
-const response = calculateWmis3(testData);
-console.error(
-  `JD!!! wis.ts 30. The value of response is ${JSON.stringify(
-    response,
-    null,
-    2
-  )} `
-);
+// const response = calculateWmis3(testData);
+// console.error(
+//   `JD!!! wis.ts 30. The value of response is ${JSON.stringify(
+//     response,
+//     null,
+//     2
+//   )} `
+// );
