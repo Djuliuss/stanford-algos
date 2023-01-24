@@ -19,7 +19,7 @@ export const knapsackFromFile = (filename: string) => {
     }
   }
   map = {};
-  return knapsack(items, capacity);
+  return knapsack4(items, capacity);
 };
 
 export const knapsack = (items: item[], capacity: number) => {
@@ -40,11 +40,40 @@ export const knapsack = (items: item[], capacity: number) => {
       if (size > c) {
         a[i][c] = a[i - 1][c];
       } else {
+        console.info(
+          `i ${i} c ${c} first ${a[i - 1][c]} second ${
+            a[i - 1][c - size] + value
+          }`
+        );
+        console.info(`a ${a[i - 1][c - size]} value ${value}`);
         a[i][c] = Math.max(a[i - 1][c], a[i - 1][c - size] + value);
       }
     }
   }
   return a[length][capacity];
+};
+
+export const knapsack4 = (items: item[], capacity: number) => {
+  let previous: number[] = [];
+  for (let c = 0; c <= capacity; c++) {
+    previous[c] = 0;
+  }
+  const length = items.length;
+  let current: number[] = [];
+  for (let i = 0; i < length; i++) {
+    // i % 1000 === 0 && console.info(`doing ${i}`);
+    for (let c = 0; c <= capacity; c++) {
+      // c % 10000 === 0 && console.info(`capacity ${c}`);
+      const { size, value } = items[i];
+      if (size > c) {
+        current[c] = previous[c];
+      } else {
+        current[c] = Math.max(previous[c], previous[c - size] + value);
+      }
+    }
+    previous = [...current];
+  }
+  return current[current.length - 1];
 };
 
 const knapsack2 = (items: item[], capacity: number): number => {
@@ -98,11 +127,11 @@ const testData: item[] = [
   { value: 4, size: 3 },
 ];
 
-// const response = knapsack3(testData, 6);
-// console.error(
-//   `JD!!! knapsack.ts 31. The value of response is ${JSON.stringify(
-//     response,
-//     null,
-//     2
-//   )} `
-// );
+const response = knapsack4(testData, 6);
+console.error(
+  `JD!!! knapsack.ts 31. The value of response is ${JSON.stringify(
+    response,
+    null,
+    2
+  )} `
+);
