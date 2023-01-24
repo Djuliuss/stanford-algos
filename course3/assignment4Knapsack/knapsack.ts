@@ -1,7 +1,7 @@
 import { item } from "./types";
 const nReadlines = require("n-readlines");
 
-let map: Map<string, number> = new Map();
+let map: { [key: string]: number } = {};
 
 export const knapsackFromFile = (filename: string) => {
   const items: item[] = [];
@@ -18,7 +18,7 @@ export const knapsackFromFile = (filename: string) => {
       });
     }
   }
-  map = new Map();
+  map = {};
   return knapsack3(items, capacity);
 };
 
@@ -67,15 +67,6 @@ const knapsack2 = (items: item[], capacity: number): number => {
 
 const knapsack3 = (items: item[], capacity: number): number => {
   const length = items.length;
-  length % 1000 === 0 &&
-    console.error(
-      `JD!!! knapsack.ts 70. The value of length is ${JSON.stringify(
-        length,
-        null,
-        2
-      )} `
-    );
-
   const { value, size } = items[length - 1];
   if (length === 0) {
     throw new Error(`oops, should not happen`);
@@ -84,21 +75,21 @@ const knapsack3 = (items: item[], capacity: number): number => {
     return returning;
   } else if (size > capacity) {
     const key = (length - 1).toString() + "/" + capacity.toString();
-    if (!map.has(key)) {
-      map.set(key, knapsack3(items.slice(0, -1), capacity));
+    if (!map[key]) {
+      map[key] = knapsack3(items.slice(0, -1), capacity);
     }
-    const returning = map.get(key)!;
+    const returning = map[key];
     return returning;
   } else {
     const key1 = (length - 1).toString() + "/" + capacity.toString();
-    if (!map.has(key1)) {
-      map.set(key1, knapsack3(items.slice(0, -1), capacity));
+    if (!map[key1]) {
+      map[key1] = knapsack3(items.slice(0, -1), capacity);
     }
     const key2 = (length - 1).toString() + "/" + (capacity - size).toString();
-    if (!map.has(key2)) {
-      map.set(key2, knapsack3(items.slice(0, -1), capacity - size));
+    if (!map[key2]) {
+      map[key2] = knapsack3(items.slice(0, -1), capacity - size);
     }
-    const returning = Math.max(map.get(key1)!, map.get(key2)! + value);
+    const returning = Math.max(map[key1]!, map[key2]! + value);
     return returning;
   }
 };
