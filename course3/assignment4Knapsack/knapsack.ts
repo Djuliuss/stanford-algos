@@ -27,14 +27,16 @@ export const knapsack = (items: item[], capacity: number) => {
   const a: Array<Array<number>> = [];
   for (let i = 0; i <= length; i++) {
     a[i] = [];
-    for (let c = 0; c <= capacity; c++) {
-      a[i][c] = 0;
-    }
+    // for (let c = 0; c <= capacity; c++) {
+    //   a[i][c] = 0;
+    // }
+  }
+  for (let c = 0; c <= capacity; c++) {
+    a[0][c] = 0;
   }
   for (let i = 1; i <= length; i++) {
     for (let c = 0; c <= capacity; c++) {
       const { size, value } = items[i - 1];
-
       if (size > c) {
         a[i][c] = a[i - 1][c];
       } else {
