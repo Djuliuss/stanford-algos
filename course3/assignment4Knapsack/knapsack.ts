@@ -19,17 +19,16 @@ export const knapsackFromFile = (filename: string) => {
     }
   }
   map = {};
-  return knapsack4(items, capacity);
+  return knapsack(items, capacity);
 };
+
+// blows up with memory for capacity > 1000000
 
 export const knapsack = (items: item[], capacity: number) => {
   const length = items.length;
   const a: Array<Array<number>> = [];
   for (let i = 0; i <= length; i++) {
     a[i] = [];
-    // for (let c = 0; c <= capacity; c++) {
-    //   a[i][c] = 0;
-    // }
   }
   for (let c = 0; c <= capacity; c++) {
     a[0][c] = 0;
@@ -40,12 +39,6 @@ export const knapsack = (items: item[], capacity: number) => {
       if (size > c) {
         a[i][c] = a[i - 1][c];
       } else {
-        console.info(
-          `i ${i} c ${c} first ${a[i - 1][c]} second ${
-            a[i - 1][c - size] + value
-          }`
-        );
-        console.info(`a ${a[i - 1][c - size]} value ${value}`);
         a[i][c] = Math.max(a[i - 1][c], a[i - 1][c - size] + value);
       }
     }
@@ -53,6 +46,7 @@ export const knapsack = (items: item[], capacity: number) => {
   return a[length][capacity];
 };
 
+// only keeps the previous row. returns the right value but we would not be able to reconstruct the solution
 export const knapsack4 = (items: item[], capacity: number) => {
   let previous: number[] = [];
   for (let c = 0; c <= capacity; c++) {
@@ -61,9 +55,7 @@ export const knapsack4 = (items: item[], capacity: number) => {
   const length = items.length;
   let current: number[] = [];
   for (let i = 0; i < length; i++) {
-    // i % 1000 === 0 && console.info(`doing ${i}`);
     for (let c = 0; c <= capacity; c++) {
-      // c % 10000 === 0 && console.info(`capacity ${c}`);
       const { size, value } = items[i];
       if (size > c) {
         current[c] = previous[c];
@@ -75,6 +67,7 @@ export const knapsack4 = (items: item[], capacity: number) => {
   }
   return current[current.length - 1];
 };
+// recursive no caching, it won't finish with  with capacity > 100 and lengh > 100
 
 const knapsack2 = (items: item[], capacity: number): number => {
   const length = items.length;
@@ -95,6 +88,8 @@ const knapsack2 = (items: item[], capacity: number): number => {
     return returning;
   }
 };
+
+// recursive with caching it won't finish with  with capacity > 10000 and lengh > 1000
 
 const knapsack3 = (items: item[], capacity: number): number => {
   const length = items.length;
