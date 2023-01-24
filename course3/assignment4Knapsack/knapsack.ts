@@ -19,16 +19,16 @@ export const knapsackFromFile = (filename: string) => {
     }
   }
   map = {};
-  return knapsack3(items, capacity);
+  return knapsack(items, capacity);
 };
 
 export const knapsack = (items: item[], capacity: number) => {
   const length = items.length;
   const a: Array<Array<number>> = [];
-  for (let index = 0; index <= length; index++) {
-    a[index] = [];
+  for (let i = 0; i <= length; i++) {
+    a[i] = [];
     for (let c = 0; c <= capacity; c++) {
-      a[index][c] = 0;
+      a[i][c] = 0;
     }
   }
   for (let i = 1; i <= length; i++) {
@@ -67,29 +67,24 @@ const knapsack2 = (items: item[], capacity: number): number => {
 
 const knapsack3 = (items: item[], capacity: number): number => {
   const length = items.length;
-  const { value, size } = items[length - 1];
   if (length === 0) {
-    throw new Error(`oops, should not happen`);
-  } else if (length === 1) {
-    const returning = size <= capacity ? value : 0;
-    return returning;
-  } else if (size > capacity) {
-    const key = (length - 1).toString() + "/" + capacity.toString();
-    if (!map[key]) {
-      map[key] = knapsack3(items.slice(0, -1), capacity);
-    }
-    const returning = map[key];
+    return 0;
+  }
+  const key = length.toString() + "/" + capacity.toString();
+  if (map[key] || map[key] === 0) {
+    return map[key];
+  }
+  const { value, size } = items[length - 1];
+  if (size > capacity) {
+    const returning = knapsack3(items.slice(0, -1), capacity);
+    map[key] = returning;
     return returning;
   } else {
-    const key1 = (length - 1).toString() + "/" + capacity.toString();
-    if (!map[key1]) {
-      map[key1] = knapsack3(items.slice(0, -1), capacity);
-    }
-    const key2 = (length - 1).toString() + "/" + (capacity - size).toString();
-    if (!map[key2]) {
-      map[key2] = knapsack3(items.slice(0, -1), capacity - size);
-    }
-    const returning = Math.max(map[key1]!, map[key2]! + value);
+    const returning = Math.max(
+      knapsack3(items.slice(0, -1), capacity),
+      knapsack3(items.slice(0, -1), capacity - size) + value
+    );
+    map[key] = returning;
     return returning;
   }
 };
