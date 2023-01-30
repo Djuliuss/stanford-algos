@@ -19,7 +19,7 @@ export const knapsackFromFile = (filename: string) => {
     }
   }
   map = {};
-  return knapsack(items, capacity);
+  return knapsack(items, K);
 };
 
 // blows up with memory for capacity > 1000000
