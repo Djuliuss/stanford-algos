@@ -1,3 +1,4 @@
+import { nextTick } from "process";
 import { Graph } from "./types";
 import {
   extractMinimumDimensionalArray,
@@ -36,7 +37,8 @@ export const getAllPairsShortestPathFromFile = async (filename: string) => {
       graph[index] = [];
     }
   }
-  const responseFloydWarshall = getAllParisShortPathsFloydWarshall(graph);
+  const responseFloydWarshall =
+    getAllParisShortPathsFloydWarshallOptimised(graph);
   return responseFloydWarshall !== null
     ? extractMinimumDimensionalArray(responseFloydWarshall).toString()
     : "NULL";
@@ -74,6 +76,48 @@ export const getAllParisShortPathsFloydWarshall = (graph: Graph) => {
   let response: number[][] | null = arrayA[numberVertices];
   for (let v = 0; v < numberVertices; v++) {
     if (arrayA[numberVertices][v][v] < 0) {
+      response = null;
+    }
+  }
+  return response;
+};
+
+// JD!!!
+// this function has been tweaked to deal with bigger graphs ( >1000 nodes). It does not keep all the iterations but just the previous one. This is only useful is we are only interested in the final value (and not the paths themselves)
+export const getAllParisShortPathsFloydWarshallOptimised = (graph: Graph) => {
+  const vertices = Object.keys(graph);
+  const numberVertices = vertices.length;
+
+  let previousIteration = new Array(numberVertices)
+    .fill(0)
+    .map(() => new Array(numberVertices).fill(0));
+  // base cases k = 0;
+  for (let v = 1; v <= numberVertices; v++) {
+    for (let w = 1; w <= numberVertices; w++) {
+      previousIteration[v - 1][w - 1] =
+        v === w ? 0 : getLengthBetweenVertices(graph, v, w);
+    }
+  }
+  //   systematically solve all problems
+  for (let k = 1; k <= numberVertices; k++) {
+    k % 100 === 0 && console.info(`iteration ${k}`);
+    const nextIteration = new Array(numberVertices)
+      .fill(0)
+      .map(() => new Array(numberVertices).fill(0));
+    for (let v = 1; v <= numberVertices; v++) {
+      for (let w = 1; w <= numberVertices; w++) {
+        const case1 = previousIteration[v - 1][w - 1];
+        const case2 =
+          previousIteration[v - 1][k - 1] + previousIteration[k - 1][w - 1];
+        nextIteration[v - 1][w - 1] = case1 <= case2 ? case1 : case2;
+      }
+    }
+    previousIteration = [...nextIteration];
+  }
+  // check for negative cycle
+  let response: number[][] | null = previousIteration;
+  for (let v = 0; v < numberVertices; v++) {
+    if (previousIteration[v][v] < 0) {
       response = null;
     }
   }
