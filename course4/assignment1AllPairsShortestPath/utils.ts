@@ -22,3 +22,13 @@ export const identicalArrays = (arr1: any[], arr2: any[]) => {
   });
   return response;
 };
+
+export const extractMinimumDimensionalArray = (array: number[][]) => {
+  let min = INFINITY;
+  for (let i = 0; i < array.length; i++) {
+    for (let j = 0; j < array.length; j++) {
+      min = array[i][j] < min ? array[i][j] : min;
+    }
+  }
+  return min;
+};

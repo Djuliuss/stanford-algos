@@ -1,7 +1,48 @@
 import { Graph } from "./types";
-import { getLengthBetweenVertices } from "./utils";
+import {
+  extractMinimumDimensionalArray,
+  getLengthBetweenVertices,
+} from "./utils";
+const nReadlines = require("n-readlines");
 
-export const floydWarshall = (graph: Graph) => {
+export const getAllPairsShortestPathFromFile = async (filename: string) => {
+  const graph: Graph = {};
+  const broadbandLines = new nReadlines(filename);
+  // JD!!!
+  // ignore first row
+  let line = broadbandLines.next();
+  const numberVertices = line.toString("ascii").split(" ").map(Number)[0];
+
+  while ((line = broadbandLines.next())) {
+    const numbersRow = line.toString("ascii").split(" "); //  with spaces.
+    const [vortex, ...arcFile] = numbersRow;
+    const vortexNumber = Number(vortex);
+    if (!graph[vortexNumber]) {
+      graph[vortexNumber] = [];
+    }
+    const [head, length] = arcFile.map(Number);
+    if (head === vortexNumber && length < 0) {
+      return "NULL";
+    }
+    const edge = graph[vortexNumber].find((e) => e.head === head);
+    if (edge) {
+      edge.length = length < edge.length ? length : edge.length;
+    } else {
+      graph[vortexNumber].push({ head, length });
+    }
+  }
+  for (let index = 1; index <= numberVertices; index++) {
+    if (!graph[index]) {
+      graph[index] = [];
+    }
+  }
+  const responseFloydWarshall = getAllParisShortPathsFloydWarshall(graph);
+  return responseFloydWarshall !== null
+    ? extractMinimumDimensionalArray(responseFloydWarshall).toString()
+    : "NULL";
+};
+
+export const getAllParisShortPathsFloydWarshall = (graph: Graph) => {
   const vertices = Object.keys(graph);
   const numberVertices = vertices.length;
 
@@ -30,11 +71,11 @@ export const floydWarshall = (graph: Graph) => {
     }
   }
   // check for negative cycle
-  let response;
+  let response: number[][] | null = arrayA[numberVertices];
   for (let v = 0; v < numberVertices; v++) {
-    if (arrayA[numberVertices][v][v]) {
+    if (arrayA[numberVertices][v][v] < 0) {
       response = null;
     }
   }
-  return arrayA[numberVertices];
+  return response;
 };
