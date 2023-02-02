@@ -1,6 +1,6 @@
 import { city } from "./types";
 
-const getEuclideanDistance = (
+export const getEuclideanDistance = (
   { coordinateX: xCityA, coordinateY: yCityA }: city,
   { coordinateX: xCityB, coordinateY: yCityB }: city
 ) => Math.sqrt((xCityA - xCityB) ** 2 + (yCityA - yCityB) ** 2);

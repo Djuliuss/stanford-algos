@@ -1,4 +1,4 @@
-import { getAllPairsShortestPathFromFile, getTSP } from "./tsp";
+import { getTspFromFile, getTSP } from "./tsp";
 
 const nReadlines = require("n-readlines");
 const testFileNames = [
@@ -78,22 +78,22 @@ const testFileNames = [
   "74_20",
   "75_20",
   "76_20",
-  //   "77_21",
-  //   "78_21",
-  //   "79_21",
-  //   "80_21",
-  //   "81_22",
-  //   "82_22",
-  //   "83_22",
-  //   "84_22",
-  //   "85_23",
-  //   "86_23",
-  //   "87_23",
-  //   "88_23",
-  //   "89_24",
-  //   "90_24",
-  //   "91_24",
-  //   "92_24",
+  "77_21",
+  "78_21",
+  "79_21",
+  "80_21",
+  "81_22",
+  "82_22",
+  "83_22",
+  "84_22",
+  "85_23",
+  "86_23",
+  "87_23",
+  "88_23",
+  "89_24",
+  "90_24",
+  "91_24",
+  "92_24",
 ];
 
 (async () => {
@@ -102,7 +102,7 @@ const testFileNames = [
   for (const testFileName of testFileNames) {
     const inputFile = `./course4/assignment2TSP/testCases/input_float_${testFileName}.txt`;
     const outputFile = `./course4/assignment2TSP/testCases/output_float_${testFileName}.txt`;
-    const response = await getAllPairsShortestPathFromFile(inputFile);
+    const response = await getTspFromFile(inputFile);
     const expectedResult = await fetchExpectedResult(outputFile);
     if (response !== expectedResult) {
       console.error(
