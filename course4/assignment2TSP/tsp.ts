@@ -9,7 +9,7 @@ import { getDistanceMatrix } from "./utils";
 
 const INFINITY = 9999999999;
 
-const getTSP = (cities: city[]) => {
+export const getTSP = (cities: city[]) => {
   const distanceMatrix = getDistanceMatrix(cities);
   const numberCities = cities.length;
   const allPossibleSubsets = generateBinaryNumbers(numberCities);
@@ -22,8 +22,9 @@ const getTSP = (cities: city[]) => {
   // 1 - initialise
   for (let index = 0; index < subsetsToIterateCardinality; index++) {
     const subsetToIterate = subsetsToIterate[index];
+    matrixA[subsetToIterate] = [];
     matrixA[subsetToIterate][0] =
-      subsetToIterate.toString(2) === "1".repeat(numberCities - 1)
+      subsetToIterate.toString(2) === "1" + "0".repeat(numberCities - 1)
         ? 0
         : INFINITY;
   }
@@ -65,10 +66,9 @@ const getTSP = (cities: city[]) => {
   let min = INFINITY;
   const allCitiesSet = parseInt("1".repeat(numberCities), 2);
   for (let index = 2; index <= numberCities; index++) {
-    min =
-      matrixA[allCitiesSet][index - 1] < min
-        ? matrixA[allCitiesSet][index - 1]
-        : min;
+    const value =
+      matrixA[allCitiesSet][index - 1] + distanceMatrix[index - 1][0];
+    min = value < min ? value : min;
   }
-  return min;
+  return Math.floor(min);
 };

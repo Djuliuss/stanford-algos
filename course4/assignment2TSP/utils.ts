@@ -9,6 +9,8 @@ export const getDistanceMatrix = (cities: city[]) => {
   const matrix: number[][] = [];
   for (let i = 0; i < cities.length; i++) {
     matrix[i] = [];
+  }
+  for (let i = 0; i < cities.length; i++) {
     for (let j = 0; j < cities.length; j++) {
       const euclideanDistance = getEuclideanDistance(cities[i], cities[j]);
       matrix[i][j] = euclideanDistance;

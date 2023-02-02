@@ -90,10 +90,10 @@ export const binaryToPositions = (str: string): number[] => {
 export function setBitToZero(binary: string, position: number): string {
   let result = "";
   for (let i = 0; i < binary.length; i++) {
-    if (i === binary.length - position - 1) {
-      result = "0" + result;
+    if (i === position) {
+      result = result + "0";
     } else {
-      result = binary[i] + result;
+      result = result + binary[i];
     }
   }
   return result;
