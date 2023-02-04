@@ -1,9 +1,9 @@
-import { heuristicGetTspFromFile } from "./tsp";
+import { optimisedGetTspFromFile } from "./tsp";
 
 (async () => {
   console.time("test");
 
-  const response = await heuristicGetTspFromFile(
+  const response = await optimisedGetTspFromFile(
     "/Users/julio/algorithms/course4/assignment2TSP/tsp.txt"
   );
   console.error(

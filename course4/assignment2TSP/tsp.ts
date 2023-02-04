@@ -27,7 +27,7 @@ export const getTspFromFile = async (filename: string) => {
 
 // JD!!!
 // algorithim specifically designed to pass the exam. Takes advantage of the fact that cities can be divided in two sides, left and right, with cities 11 and 12 being in the middle.
-export const heuristicGetTspFromFile = async (filename: string) => {
+export const optimisedGetTspFromFile = async (filename: string) => {
   const cities: city[] = [];
   const broadbandLines = new nReadlines(filename);
   let line = broadbandLines.next();
