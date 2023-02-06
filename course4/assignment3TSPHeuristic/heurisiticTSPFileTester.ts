@@ -1,3 +1,5 @@
+import { getHeuristicTspFromFile } from "./heuristicTSP";
+
 const nReadlines = require("n-readlines");
 const testFileNames = [
   "1_2",
@@ -80,8 +82,7 @@ const testFileNames = [
   for (const testFileName of testFileNames) {
     const inputFile = `./course4/assignment3TSPHeuristic/testCases/input_simple_${testFileName}.txt`;
     const outputFile = `./course4/assignment3TSPHeuristic/testCases/output_simple_${testFileName}.txt`;
-    // const response = await getTspFromFile(inputFile);
-    const response = 0;
+    const response = await getHeuristicTspFromFile(inputFile);
     const expectedResult = await fetchExpectedResult(outputFile);
     if (response !== expectedResult) {
       console.error(
