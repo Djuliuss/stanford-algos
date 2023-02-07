@@ -1,4 +1,4 @@
-import { binaryVariables, clause } from "./types";
+import { binaryVariables, clause, counters } from "./types";
 
 export const satisfiesClause = (
   binaryVariables: binaryVariables,
@@ -46,6 +46,24 @@ export const generateRandomBinaryValue = () => (Math.random() >= 0.5 ? 1 : 0);
 export const pickRandomClause = (clauses: clause[]) => {
   const index = Math.floor(Math.random() * clauses.length);
   return clauses[index];
+};
+
+export const pickClauseBasedOnCounters = (
+  clauses: clause[],
+  counters: counters
+) => {
+  const sortedClauses = clauses.sort((clauseA, clauseB) => {
+    const [clauseA1, clauseA2] = clauseA;
+    const [clauseB1, clauseB2] = clauseB;
+    const [variableA1, variableA2] = [Math.abs(clauseA1), Math.abs(clauseA2)];
+    const [variableB1, variableB2] = [Math.abs(clauseB1), Math.abs(clauseB2)];
+    return (
+      counters[variableA1] +
+      counters[variableA2] -
+      (counters[variableB1] + counters[variableB2])
+    );
+  });
+  return sortedClauses[0];
 };
 
 export const adjustCandidate = (
