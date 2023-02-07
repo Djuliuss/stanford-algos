@@ -106,28 +106,15 @@ export const reduceClauses = (clauses: clause[]): clause[] => {
   if (uniqueValues.length === 0) {
     return clauses;
   } else {
-    const filteredClauses = clauses.filter(
-      (clause) =>
-        !uniqueValues.includes(clause[0]) && !uniqueValues.includes(clause[1])
-    );
+    const map: { [key: number]: boolean } = {};
+    uniqueValues.forEach((e) => (map[e] = true));
+    const filteredClauses: clause[] = [];
+    clauses.forEach((clause) => {
+      if (!map[clause[0]] && !map[clause[1]]) {
+        filteredClauses.push(clause);
+      }
+    });
+
     return reduceClauses(filteredClauses);
   }
 };
-
-// const testData: clause[] = [
-//   [1, 2],
-//   [-1, 3],
-//   [2, -3],
-//   [-3, 5],
-//   [-3, -5],
-//   [3, 5],
-// ];
-
-// const response = reduceClauses(testData);
-// console.error(
-//   `JD!!! utils.ts 127. The value of response is ${JSON.stringify(
-//     response,
-//     null,
-//     2
-//   )} `
-// );

@@ -27,9 +27,9 @@ const getTwoSat = (
   filename: string
 ) => {
   const numberIterations = Math.floor(Math.log2(numberVariables));
-  let candidate: any;
+  let candidate = new Array(numberVariables);
   for (let iteration = 1; iteration <= numberIterations; iteration++) {
-    candidate = new Array(numberVariables).fill(generateRandomBinaryValue());
+    candidate.fill(generateRandomBinaryValue());
     let counter = 1;
     const targetCounter = 2 * Math.pow(clauses.length, 2);
     while (
@@ -37,28 +37,15 @@ const getTwoSat = (
       !satisfiesAllClauses(candidate, clauses)
     ) {
       const unsatisfiedClauses = getUnsatisfiedClauses(candidate, clauses);
-      // if (counter % 1000 === 0) {
-      //   console.info(
-      //     `filename: ${filename.substring(
-      //       filename.length - 25,
-      //       filename.length
-      //     )} iteration ${iteration} counter ${counter} targetCounter ${targetCounter} unsatisfied clauses ${
-      //       unsatisfiedClauses.length
-      //     }`
-      //   );
-      // }
-      // const randomClause = pickRandomClause(unsatisfiedClauses);
       unsatisfiedClauses.forEach((clause) =>
         adjustCandidate(candidate, clause)
       );
-      // adjustCandidate(candidate, randomClause);
       counter++;
     }
     if (satisfiesAllClauses(candidate, clauses)) {
+      iteration > 1 && console.info(`HEY`);
       break;
     }
   }
-  // JD!!!
-  // any
-  return satisfiesAllClauses(candidate as any, clauses) ? 1 : 0;
+  return satisfiesAllClauses(candidate, clauses) ? 1 : 0;
 };
