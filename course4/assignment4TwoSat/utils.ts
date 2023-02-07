@@ -54,23 +54,6 @@ export const adjustCandidate = (
 ) => {
   const [clause1, clause2] = clause;
   const [index1, index2] = [Math.abs(clause1) - 1, Math.abs(clause2) - 1];
-  const [binaryVariable1, binaryVariable2] = [
-    binaryVariables[index1],
-    binaryVariables[index2],
-  ];
-  if ([clause1, clause2].includes(0)) {
-    throw new Error(`got clause equal to 0`);
-  }
-  const operand1 =
-    (clause1 > 0 && binaryVariable1) || (clause1 < 0 && !binaryVariable1);
-  const operand2 =
-    (clause2 > 0 && binaryVariable2) || (clause2 < 0 && !binaryVariable2);
-  if (!operand1 && !operand2) {
-    const index = Math.random() >= 0.5 ? 1 : 0;
-    switchValue(binaryVariables, [index1, index2][index]);
-  } else if (!operand1) {
-    switchValue(binaryVariables, index1);
-  } else {
-    switchValue(binaryVariables, index2);
-  }
+  const index = Math.random() >= 0.5 ? 1 : 0;
+  switchValue(binaryVariables, [index1, index2][index]);
 };
