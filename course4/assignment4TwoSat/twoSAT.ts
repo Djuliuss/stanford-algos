@@ -34,11 +34,11 @@ const getTwoSat = (clauses: clause[], filename: string) => {
       counter <= targetCounter &&
       !satisfiesAllClauses(candidate, clauses)
     ) {
-      // if (counter % 100 === 0) {
-      //   console.info(
-      //     `filename${filename} iteration ${iteration} counter ${counter} targetCounter ${targetCounter}`
-      //   );
-      // }
+      if (counter % 100 === 0) {
+        console.info(
+          `filename${filename} iteration ${iteration} counter ${counter} targetCounter ${targetCounter}`
+        );
+      }
       const unsatisfiedClauses = getUnsatisfiedClauses(candidate, clauses);
       const randomClause = pickRandomClause(unsatisfiedClauses);
       adjustCandidate(candidate, randomClause);
