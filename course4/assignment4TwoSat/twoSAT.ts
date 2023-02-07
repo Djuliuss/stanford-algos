@@ -6,6 +6,21 @@ import {
   pickRandomClause,
   satisfiesAllClauses,
 } from "./utils";
+const nReadlines = require("n-readlines");
+
+export const getTwoSatFromFile = async (filename: string) => {
+  const clauses: clause[] = [];
+  const broadbandLines = new nReadlines(filename);
+  // JD!!!
+  // ignore first row
+  let line = broadbandLines.next();
+
+  while ((line = broadbandLines.next())) {
+    const numbersRow = line.toString("ascii").split(" ").map(Number); //  with spaces.
+    clauses.push([numbersRow[0], numbersRow[1]]);
+  }
+  return getTwoSat(clauses);
+};
 
 const getTwoSat = (clauses: clause[]) => {
   const numberVariables = clauses.length;
@@ -24,5 +39,7 @@ const getTwoSat = (clauses: clause[]) => {
       counter++;
     }
   }
+  // JD!!!
+  // any
   return satisfiesAllClauses(candidate as any, clauses) ? 1 : 0;
 };

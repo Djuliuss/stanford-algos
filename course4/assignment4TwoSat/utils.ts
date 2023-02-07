@@ -44,7 +44,7 @@ export const switchValue = (binaryVariables: binaryVariables, index: number) =>
 export const generateRandomBinaryValue = () => (Math.random() >= 0.5 ? 1 : 0);
 
 export const pickRandomClause = (clauses: clause[]) => {
-  const index = Math.random() * clauses.length;
+  const index = Math.floor(Math.random() * clauses.length);
   return clauses[index];
 };
 
@@ -66,7 +66,7 @@ export const adjustCandidate = (
   const operand2 =
     (clause2 > 0 && binaryVariable2) || (clause2 < 0 && !binaryVariable2);
   if (!operand1 && !operand2) {
-    const index = Math.random() * 2;
+    const index = Math.random() >= 0.5 ? 1 : 0;
     switchValue(binaryVariables, [index1, index2][index]);
   } else if (!operand1) {
     switchValue(binaryVariables, index1);

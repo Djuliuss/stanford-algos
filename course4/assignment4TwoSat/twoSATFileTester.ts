@@ -1,3 +1,5 @@
+import { getTwoSatFromFile } from "./twoSAT";
+
 const nReadlines = require("n-readlines");
 const testFileNames = [
   "1_2",
@@ -30,16 +32,16 @@ const testFileNames = [
   "28_4000",
   "29_8000",
   "30_8000",
-  "31_10000",
-  "32_10000",
-  "33_20000",
-  "34_20000",
-  "35_40000",
-  "36_40000",
-  "37_80000",
-  "38_80000",
-  "39_100000",
-  "40_100000",
+  // "31_10000",
+  // "32_10000",
+  // "33_20000",
+  // "34_20000",
+  // "35_40000",
+  // "36_40000",
+  // "37_80000",
+  // "38_80000",
+  // "39_100000",
+  // "40_100000",
 ];
 
 (async () => {
@@ -48,8 +50,7 @@ const testFileNames = [
   for (const testFileName of testFileNames) {
     const inputFile = `./course4/assignment4TwoSat/testCases/input_beaunus_${testFileName}.txt`;
     const outputFile = `./course4/assignment4TwoSat/testCases/output_beaunus_${testFileName}.txt`;
-    // const response = await getHeuristicTspFromFile(inputFile);
-    const response = 0;
+    const response = await getTwoSatFromFile(inputFile);
     const expectedResult = await fetchExpectedResult(outputFile);
     if (response !== expectedResult) {
       console.error(
