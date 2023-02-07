@@ -75,3 +75,59 @@ export const adjustCandidate = (
   const index = Math.random() >= 0.5 ? 1 : 0;
   switchValue(binaryVariables, [index1, index2][index]);
 };
+
+export const reduceClauses = (clauses: clause[]): clause[] => {
+  const positiveXs: { [key: number]: boolean } = {};
+  const negativeXs: { [key: number]: boolean } = {};
+  clauses.forEach((clause) => {
+    clause.forEach((number) => {
+      if (number > 0) {
+        positiveXs[number] = true;
+      } else {
+        negativeXs[Math.abs(number)] = true;
+      }
+    });
+  });
+  const uniqueValues: number[] = [];
+  Object.keys(positiveXs)
+    .map(Number)
+    .forEach((x) => {
+      if (!negativeXs[x]) {
+        uniqueValues.push(x);
+      }
+    });
+  Object.keys(negativeXs)
+    .map(Number)
+    .forEach((x) => {
+      if (!positiveXs[x]) {
+        uniqueValues.push(-1 * x);
+      }
+    });
+  if (uniqueValues.length === 0) {
+    return clauses;
+  } else {
+    const filteredClauses = clauses.filter(
+      (clause) =>
+        !uniqueValues.includes(clause[0]) && !uniqueValues.includes(clause[1])
+    );
+    return reduceClauses(filteredClauses);
+  }
+};
+
+// const testData: clause[] = [
+//   [1, 2],
+//   [-1, 3],
+//   [2, -3],
+//   [-3, 5],
+//   [-3, -5],
+//   [3, 5],
+// ];
+
+// const response = reduceClauses(testData);
+// console.error(
+//   `JD!!! utils.ts 127. The value of response is ${JSON.stringify(
+//     response,
+//     null,
+//     2
+//   )} `
+// );
